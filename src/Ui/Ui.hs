@@ -2,6 +2,7 @@
 
 module Ui where
 
+import qualified Data.Text as T
 import Data.Monoid((<>))
 import Data.Text.Markup((@@))
 
@@ -28,7 +29,11 @@ theMap = attrMap V.defAttr
     , ("keyword2",      V.white `on` V.blue)
     ]
 
-app :: App () V.Event ()
+data AppState = 
+    AppState { travisUser :: T.Text }
+    deriving (Eq, Show)
+
+app :: App AppState V.Event ()
 app =
     App { appDraw = const [ui]
         , appHandleEvent = resizeOrQuit
@@ -38,6 +43,3 @@ app =
         , appLiftVtyEvent = id
         }
 
-getDefaultMain :: IO () 
-getDefaultMain = 
-    defaultMain app ()
