@@ -37,3 +37,7 @@ app =
         , appChooseCursor = neverShowCursor
         , appLiftVtyEvent = id
         }
+
+getDefaultMain :: IO () 
+getDefaultMain = 
+    defaultMain app ()
