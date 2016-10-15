@@ -13,14 +13,16 @@ import Brick.Util (on, fg)
 import Brick.Widgets.Core(
       (<+>)
     , (<=>)
-    , str
+    , txt
     )
 import Brick.AttrMap (attrMap, AttrMap)
 import Brick.Main (App(..), defaultMain, resizeOrQuit, neverShowCursor)
 
 
-ui :: BT.Widget ()
-ui = str "Hello"
+ui :: AppState -> [BT.Widget ()]
+ui st = [widget]
+    where widget = txt $ T.concat [ "Hello "
+                                  , travisUser st]
 
 
 theMap :: AttrMap
@@ -35,7 +37,7 @@ data AppState =
 
 app :: App AppState V.Event ()
 app =
-    App { appDraw = const [ui]
+    App { appDraw = ui
         , appHandleEvent = resizeOrQuit
         , appAttrMap = const theMap
         , appStartEvent = return
