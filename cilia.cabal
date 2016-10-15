@@ -61,6 +61,10 @@ executable cilia
   
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.8 && <4.9
+                     , text-format == 0.3.1.1
+                     , aeson == 0.11.2.1
+                     , wreq == 0.4.1.0
+                     , brick == 0.10
   
   -- Directories containing source files.
   hs-source-dirs:      src
