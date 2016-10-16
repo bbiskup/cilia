@@ -22,7 +22,7 @@ import Brick.Main (
       App(..)
     , defaultMain
     , resizeOrQuit
-    , neverShowCursor
+    , showFirstCursor
     , halt
     , continue
     )
@@ -60,13 +60,13 @@ appEvent st e =
 
 
 
-app :: App AppState V.Event ()
+app :: App AppState CustomEvent ()
 app =
     App { appDraw = ui
-        , appHandleEvent = resizeOrQuit
+        , appHandleEvent = appEvent
         , appAttrMap = const theMap
         , appStartEvent = return
-        , appChooseCursor = neverShowCursor
-        , appLiftVtyEvent = id
+        , appChooseCursor = showFirstCursor
+        , appLiftVtyEvent = VtyEvent
         }
 
