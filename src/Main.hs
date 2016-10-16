@@ -18,6 +18,6 @@ checkCIServers = forever $ do
 main :: IO ()
 main = do
     ciThread <- forkIO checkCIServers 
-    let s = AppState { travisUser = "bbiskup"}
+    let s = AppState { _travisUser = "bbiskup"}
     defaultMain app s
     return ()

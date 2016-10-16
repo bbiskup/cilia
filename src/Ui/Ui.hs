@@ -1,11 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Ui where
 
 import qualified Data.Text as T
 import Data.Monoid((<>))
 import Data.Text.Markup((@@))
-
+import Lens.Micro((&), (^.), (.~))
+import Lens.Micro.TH (makeLenses)
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
 import Brick.Markup(markup, (@?))
@@ -16,13 +18,28 @@ import Brick.Widgets.Core(
     , txt
     )
 import Brick.AttrMap (attrMap, AttrMap)
-import Brick.Main (App(..), defaultMain, resizeOrQuit, neverShowCursor)
+import Brick.Main (
+      App(..)
+    , defaultMain
+    , resizeOrQuit
+    , neverShowCursor
+    , halt
+    , continue
+    )
+
+data AppState = 
+    AppState { _travisUser :: T.Text
+             , _stLastVtyEvent :: Maybe V.Event 
+             }
+    deriving (Eq, Show)
+
+makeLenses ''AppState
 
 
 ui :: AppState -> [BT.Widget ()]
 ui st = [widget]
     where widget = txt $ T.concat [ "Hello "
-                                  , travisUser st]
+                                  , st ^. travisUser]
 
 
 theMap :: AttrMap
@@ -31,9 +48,17 @@ theMap = attrMap V.defAttr
     , ("keyword2",      V.white `on` V.blue)
     ]
 
-data AppState = 
-    AppState { travisUser :: T.Text }
-    deriving (Eq, Show)
+data CustomEvent = VtyEvent V.Event
+                 | Counter
+
+
+appEvent :: AppState -> CustomEvent -> BT.EventM () (BT.Next AppState)
+appEvent st e =
+    case e of
+        VtyEvent (V.EvKey V.KEsc []) -> halt st
+        VtyEvent ev -> continue $ st & stLastVtyEvent .~ (Just ev)
+
+
 
 app :: App AppState V.Event ()
 app =
