@@ -49,11 +49,13 @@ repoUI :: [Repo]-> BT.Widget ()
 repoUI repos 
     | length repos > 0 = 
         let repo = repos !! 0 in
-        txt $ T.concat 
+            renderRepo repo
+    | otherwise = txt "no repos" 
+    where
+        renderRepo repo = txt $ T.concat 
             [ fromMaybe "-" (repo ^. slug)
             , " . " 
             , fromMaybe "-" (repo ^. description)]
-    | otherwise = txt "no repos" 
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
