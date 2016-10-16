@@ -12,9 +12,9 @@ import Ui
 checkInterval :: Int 
 checkInterval = 5 * 1000000
 
-checkCIServers :: IO ()
-checkCIServers = forever $ do
-    putStrLn "Checking CI server(s)"
+checkCIServers :: String -> IO ()
+checkCIServers s = forever $ do
+    putStrLn $ "Checking CI server(s)" ++ s
     threadDelay checkInterval
 
 initialState :: Ui.AppState
@@ -26,5 +26,5 @@ initialState = Ui.AppState
 main :: IO ()
 main = do
     chan <- newChan
-    ciThread <- forkIO checkCIServers 
+    ciThread <- forkIO $ checkCIServers "nix" 
     void $ customMain (V.mkVty def) chan app initialState
