@@ -17,12 +17,12 @@ checkCIServers :: Chan CustomEvent -> IO ()
 checkCIServers chan = forever $ do
     writeChan chan $ ReposUpdate [ 
         Repo {
-               slug = Just "myslug"
-             , description = Just "mydescription"
-             , last_build_state = Just "mylastbuildstate"
-             , last_build_number = Just "mylastbuildnumber"
-             , last_build_duration = Just 20
-             , last_build_finished_at = Just "myfinishedat"
+               _slug = Just "myslug"
+             , _description = Just "mydescription"
+             , _last_build_state = Just "mylastbuildstate"
+             , _last_build_number = Just "mylastbuildnumber"
+             , _last_build_duration = Just 20
+             , _last_build_finished_at = Just "myfinishedat"
              }
         ]
     threadDelay checkInterval
@@ -31,6 +31,7 @@ initialState :: Ui.AppState
 initialState = Ui.AppState 
     { _travisUser = "bbiskup"
     , _stLastVtyEvent = Nothing
+    , _repos = []
     }
 
 main :: IO ()

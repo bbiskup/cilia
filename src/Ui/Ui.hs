@@ -4,6 +4,7 @@
 module Ui where
 
 import qualified Data.Text as T
+import Data.Maybe(fromMaybe)
 import Data.Monoid((<>))
 import Data.Text.Markup((@@))
 import Lens.Micro((&), (^.), (.~), (%~))
@@ -16,6 +17,7 @@ import Brick.Widgets.Core(
       (<+>)
     , (<=>)
     , txt
+    , vBox
     )
 import Brick.AttrMap (attrMap, AttrMap)
 import Brick.Main (
@@ -26,7 +28,7 @@ import Brick.Main (
     , halt
     , continue
     )
-import Types(Repo)
+import Types(Repo,  slug, description)
 
 data AppState = 
     AppState { _travisUser :: T.Text
@@ -39,10 +41,19 @@ makeLenses ''AppState
 
 
 ui :: AppState -> [BT.Widget ()]
-ui st = [widget]
-    where widget = txt $ T.concat [ "Hello "
+ui st = [vBox [hello, repoUI $ st ^. repos]]
+    where hello = txt $ T.concat [ "Hello "
                                   , st ^. travisUser]
 
+repoUI :: [Repo]-> BT.Widget ()
+repoUI repos 
+    | length repos > 0 = 
+        let repo = repos !! 0 in
+        txt $ T.concat 
+            [ fromMaybe "-" (repo ^. slug)
+            , " . " 
+            , fromMaybe "-" (repo ^. description)]
+    | otherwise = txt "no repos" 
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
