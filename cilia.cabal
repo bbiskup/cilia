@@ -72,7 +72,9 @@ executable cilia
   
   -- Directories containing source files.
   hs-source-dirs:      src
-                     . src/Ui
+                     , src/Types
+                     , src/Ui
+                     , src/Ci 
 
   -- Base language which the package is written in.
   default-language:    Haskell2010
