@@ -20,7 +20,7 @@ data Repo =
          , _last_build_number :: Maybe T.Text
          , _last_build_duration :: Maybe Int
          , _last_build_finished_at :: Maybe T.Text 
-    }deriving(Eq, Show, Generic)
+    }deriving(Ord, Eq, Show, Generic)
 
 instance FromJSON Repo
 makeLenses ''Repo

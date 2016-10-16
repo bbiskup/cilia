@@ -5,6 +5,7 @@ module Ui where
 
 import qualified Data.Text as T
 import Data.Maybe(fromMaybe)
+import Data.List(sort)
 import Data.Monoid((<>))
 import Data.Text.Markup((@@))
 import Lens.Micro((&), (^.), (.~), (%~))
@@ -47,9 +48,7 @@ ui st = [vBox [hello, repoUI $ st ^. repos]]
 
 repoUI :: [Repo]-> BT.Widget ()
 repoUI repos 
-    | length repos > 0 = 
-        let repo = repos !! 0 in
-            renderRepo repo
+    | length repos > 0 = vBox . fmap renderRepo . sort $ repos
     | otherwise = txt "no repos" 
     where
         renderRepo repo = txt $ T.concat 
