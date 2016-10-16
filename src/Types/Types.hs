@@ -1,9 +1,15 @@
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module Types where
 
+import Data.Maybe(fromMaybe)
 import GHC.Generics
+import qualified Data.Text as T
+import qualified Data.Text.Lazy as TL
+import qualified Data.Text.Format as TF
+import Data.Aeson(FromJSON, ToJSON)
 
 data Repo =
     Repo { slug :: Maybe T.Text

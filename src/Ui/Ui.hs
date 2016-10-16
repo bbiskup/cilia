@@ -6,7 +6,7 @@ module Ui where
 import qualified Data.Text as T
 import Data.Monoid((<>))
 import Data.Text.Markup((@@))
-import Lens.Micro((&), (^.), (.~))
+import Lens.Micro((&), (^.), (.~), (%~))
 import Lens.Micro.TH (makeLenses)
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
@@ -26,10 +26,12 @@ import Brick.Main (
     , halt
     , continue
     )
+import Types(Repo)
 
 data AppState = 
     AppState { _travisUser :: T.Text
              , _stLastVtyEvent :: Maybe V.Event 
+             , _repos :: [Repo]
              }
     deriving (Eq, Show)
 
@@ -49,7 +51,7 @@ theMap = attrMap V.defAttr
     ]
 
 data CustomEvent = VtyEvent V.Event
-                 | Counter
+                 | ReposUpdate [Repo]
 
 
 appEvent :: AppState -> CustomEvent -> BT.EventM () (BT.Next AppState)
@@ -57,7 +59,7 @@ appEvent st e =
     case e of
         VtyEvent (V.EvKey V.KEsc []) -> halt st
         VtyEvent ev -> continue $ st & stLastVtyEvent .~ (Just ev)
-
+        (ReposUpdate newRepos) -> continue $ st & repos .~ newRepos
 
 
 app :: App AppState CustomEvent ()
