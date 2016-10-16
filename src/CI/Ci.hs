@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module Ci where
+
 import qualified Data.Text.Format as TF
 import qualified Data.List as L
 --import Lens.Micro.TH(makeLenses)
@@ -11,9 +13,10 @@ import qualified Data.Text.Lazy as TL
 import qualified Data.Text.IO as DTI
 import Data.Aeson(FromJSON, Value(..))
 import Data.Aeson.Lens(key, _String, _Array)
-import Control.Lens((^.), (^?), (.~), (&), (^..))
+import Lens.Micro((^.), (^?), (.~), (&), (^..))
 import Network.Wreq
 
+import Types(ReposResponse(..), render)
 
 type Resp = Response (ReposResponse)
 

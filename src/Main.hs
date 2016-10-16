@@ -1,21 +1,23 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import Data.Maybe(fromJust)
 import Control.Monad(void, forever)
 import Control.Concurrent(Chan, newChan, writeChan, forkIO, threadDelay)
+import Lens.Micro((^.))
 import Data.Default(def)
 import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 
-import Types(Repo(..), )
+import Types(Repo(..), repos)
 import Ui(CustomEvent(..), AppState(..), app)
+import qualified Ci
 
 checkInterval :: Int 
 checkInterval = 5 * 1000000
 
-checkCIServers :: Chan CustomEvent -> IO ()
-checkCIServers chan = forever $ do
-    writeChan chan $ ReposUpdate [ 
+dummyRepos :: [Repo]
+dummyRepos = [ 
         Repo {
                _slug = Just "myslug"
              , _description = Just "mydescription"
@@ -25,6 +27,13 @@ checkCIServers chan = forever $ do
              , _last_build_finished_at = Just "myfinishedat"
              }
         ]
+
+checkCIServers :: Chan CustomEvent -> IO ()
+checkCIServers chan = forever $ do
+    r <- fmap fromJust $ Ci.getResp
+    let repos' = repos r 
+    -- putStrLn $ "Repos" ++ (show repos')
+    writeChan chan $ ReposUpdate $ repos' 
     threadDelay checkInterval
 
 initialState :: Ui.AppState

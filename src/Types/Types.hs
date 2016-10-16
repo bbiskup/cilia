@@ -11,7 +11,12 @@ import Lens.Micro.TH(makeLenses)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Format as TF
-import Data.Aeson(FromJSON, ToJSON)
+import Data.Aeson( FromJSON(..)
+                 , ToJSON
+                 , withObject
+                 , (.:?)
+                 , (.:))
+
 
 data Repo =
     Repo { _slug :: Maybe T.Text
@@ -20,9 +25,17 @@ data Repo =
          , _last_build_number :: Maybe T.Text
          , _last_build_duration :: Maybe Int
          , _last_build_finished_at :: Maybe T.Text 
-    }deriving(Ord, Eq, Show, Generic)
+    }deriving(Ord, Eq, Show)
 
-instance FromJSON Repo
+instance FromJSON Repo where
+    parseJSON = withObject "repo" $ \o ->
+        Repo <$> o .: "slug"
+             <*> o .:? "description"
+             <*> o .:? "last_build_state"
+             <*> o .:? "last_build_number"
+             <*> o .:? "last_build_duration"
+             <*> o .:? "_last_build_finished_at"
+
 makeLenses ''Repo
 
 render :: Repo -> TL.Text
