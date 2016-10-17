@@ -14,3 +14,4 @@
   - update frequency?
 * accept command line parameters?
 * username from config (Main.hs)
+* rename Repo attributes (camelCase)
