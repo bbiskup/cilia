@@ -26,18 +26,19 @@ opts :: Options
 opts = defaults & header "Accept" .~ ["application/vnd.travis-ci.2+json"]
                         & header "User-Agent" .~ ["cilia-useragent"]
 
-getResp :: IO (Maybe ReposResponse)
-getResp  = do
+getResp :: T.Text -> IO (Maybe ReposResponse)
+getResp userName = do
     --r <- getWith opts "https://api.travis-ci.org/repos/bbiskup" 
     --let repos = r ^. responseBody . key "repos" . _Array
 
+    let reposUrl = TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName)
     r <- asJSON =<< getWith opts "https://api.travis-ci.org/repos/bbiskup" :: IO Resp
     --let (Response result) = r
     return $ Just $ r ^. responseBody
 
 main' :: IO ()
 main' = do
-    r <- fmap fromJust $ getResp
+    r <- fmap fromJust $ getResp "bbiskup"
     let repos' = repos $ r
         reposTxt = L.sort . fmap render $ repos'
     --print $ "Repo 0: " ++ (TL.unpack $ (render $ repos' !! 0))

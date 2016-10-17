@@ -30,7 +30,7 @@ dummyRepos = [
 
 checkCIServers :: Chan CustomEvent -> IO ()
 checkCIServers chan = forever $ do
-    r <- fmap fromJust $ Ci.getResp
+    r <- fmap fromJust $ Ci.getResp "bbiskup"
     let repos' = repos r 
     -- putStrLn $ "Repos" ++ (show repos')
     writeChan chan $ ReposUpdate $ repos' 
