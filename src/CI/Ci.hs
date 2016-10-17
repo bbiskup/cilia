@@ -24,7 +24,7 @@ type Resp = Response (ReposResponse)
 -- at least Accept header required, see https://docs.travis-ci.com/api#making-requests
 opts :: Options 
 opts = defaults & header "Accept" .~ ["application/vnd.travis-ci.2+json"]
-                        & header "User-Agent" .~ ["bb-useragent-1"]
+                        & header "User-Agent" .~ ["cilia-useragent"]
 
 getResp :: IO (Maybe ReposResponse)
 getResp  = do
