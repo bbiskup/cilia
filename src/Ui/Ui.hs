@@ -16,7 +16,8 @@ import qualified Brick.Types as BT
 import Brick.Markup(markup, (@?))
 import Brick.Util (on)
 import Brick.Widgets.Core(
-      txt
+      str
+    , txt
     , vBox
     )
 import Brick.AttrMap (attrMap, AttrMap, AttrName)
@@ -49,7 +50,7 @@ getDateStr = fmap show getCurrentTime
 
 
 ui :: AppState -> [BT.Widget ()]
-ui st = [vBox [hello, repoUI activeRepos]]
+ui st = [vBox [hello, repoUI activeRepos, timestampUI (st ^. timestamp)]]
     where 
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
         hello = txt $ T.concat [ "Hello "
@@ -67,6 +68,9 @@ repoUI repos'
             [ fromMaybe "-" (repo ^. slug)
             , " . " 
             , T.pack . show . fromMaybe Unknown $ repo ^. lastBuildState]
+
+timestampUI :: UTCTime -> BT.Widget ()
+timestampUI ts = str . show $ ts 
 
 colorRepo :: Repo -> AttrName
 colorRepo r = case buildState of
