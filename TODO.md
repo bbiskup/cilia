@@ -7,6 +7,9 @@
 ## UI
  * scrolling (list)
  * ctrl-c should quit?
+ * show/hide inactive repos?
+ * optional compact view (no linebreaks)?
+ * show refresh date
 
 ## General
 * read config?
