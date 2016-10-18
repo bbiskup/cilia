@@ -23,7 +23,7 @@ import Network.Wreq
 import Types(Conf, ReposResponse(..), render, travisUser)
 import Ui(CustomEvent(..))
 
-type Resp = Response (ReposResponse)
+type Resp = Response ReposResponse
 
 
 -- at least Accept header required, see https://docs.travis-ci.com/api#making-requests
@@ -50,5 +50,5 @@ checkCIServers conf chan = forever $ do
     r <- fmap fromJust $ Ci.getResp $ conf ^. travisUser
     let repos' = repos r 
     -- putStrLn $ "Repos" ++ (show repos')
-    writeChan chan $ ReposUpdate $ repos' 
+    writeChan chan $ ReposUpdate repos' 
     threadDelay checkInterval

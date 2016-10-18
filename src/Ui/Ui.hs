@@ -54,10 +54,10 @@ ui st = [vBox [hello, repoUI $ st ^. repos]]
 
 repoUI :: [Repo]-> BT.Widget ()
 repoUI repos 
-    | length repos > 0 = vBox . fmap renderRepo . sort $ repos
+    | not (null repos)  = vBox . fmap renderRepo . sort $ repos
     | otherwise = txt "no repos" 
     where
-        renderRepo repo =  markup ((repoTxt repo) @? (colorRepo repo))
+        renderRepo repo =  markup (repoTxt repo @? colorRepo repo)
 
         repoTxt :: Repo -> T.Text
         repoTxt repo = T.concat 
@@ -88,7 +88,7 @@ appEvent :: AppState -> CustomEvent -> BT.EventM () (BT.Next AppState)
 appEvent st e =
     case e of
         VtyEvent (V.EvKey V.KEsc []) -> halt st
-        VtyEvent ev -> continue $ st & stLastVtyEvent .~ (Just ev)
+        VtyEvent ev -> continue $ st & stLastVtyEvent .~ Just ev
         (ReposUpdate newRepos) -> continue $ st & repos .~ newRepos
 
 

@@ -75,6 +75,7 @@ executable cilia
                      , vty == 5.11
                      , data-default == 0.7.1.1
                      , brick == 0.10
+                     , hlint == 1.9.37
   
   -- Directories containing source files.
   hs-source-dirs:      src
