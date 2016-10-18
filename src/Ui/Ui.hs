@@ -20,7 +20,7 @@ import Brick.Widgets.Core(
     , txt
     , vBox
     )
-import Brick.AttrMap (attrMap, AttrMap)
+import Brick.AttrMap (attrMap, AttrMap, AttrName)
 import Brick.Main (
       App(..)
     , defaultMain
@@ -33,7 +33,7 @@ import Types( Repo
             ,  slug
             , description
             , last_build_state
-            , BuildState(Unknown)
+            , BuildState(..)
             , Conf
             , travisUser)
 
@@ -57,15 +57,27 @@ repoUI repos
     | length repos > 0 = vBox . fmap renderRepo . sort $ repos
     | otherwise = txt "no repos" 
     where
-        renderRepo repo = txt $ T.concat 
+        renderRepo repo =  markup ((repoTxt repo) @? (colorRepo repo))
+
+        repoTxt :: Repo -> T.Text
+        repoTxt repo = T.concat 
             [ fromMaybe "-" (repo ^. slug)
             , " . " 
             , T.pack . show . fromMaybe Unknown $ repo ^. last_build_state]
 
+colorRepo :: Repo -> AttrName
+colorRepo r = case buildState of
+    Passed -> "build.passed"
+    Failed -> "build.failed"
+    Unknown -> "build.unknown"
+
+    where buildState = fromMaybe Unknown (r ^. last_build_state)
+
 theMap :: AttrMap
 theMap = attrMap V.defAttr
-    [ ("keyword1",      fg V.yellow)
-    , ("keyword2",      V.white `on` V.blue)
+    [ ("build.passed",      V.white `on` V.green)
+    , ("build.failed",      V.yellow `on` V.red)
+    , ("build.unknown",     V.white `on` V.black)
     ]
 
 data CustomEvent = VtyEvent V.Event
