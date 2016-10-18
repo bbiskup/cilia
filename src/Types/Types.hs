@@ -23,10 +23,21 @@ data Conf =
 
 makeLenses ''Conf
 
+data BuildState =
+      Passed
+    | Failed
+    | Unknown
+    deriving(Ord, Eq, Show)
+
+instance FromJSON BuildState where
+    parseJSON "failed" = return Failed
+    parseJSON "passed" = return Passed
+    parseJSON _ = return Unknown
+
 data Repo =
     Repo { _slug :: Maybe T.Text
          , _description :: Maybe T.Text
-         , _last_build_state :: Maybe T.Text 
+         , _last_build_state :: Maybe BuildState 
          , _last_build_number :: Maybe T.Text
          , _last_build_duration :: Maybe Int
          , _last_build_finished_at :: Maybe T.Text 

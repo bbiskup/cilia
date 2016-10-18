@@ -11,6 +11,7 @@ import qualified Graphics.Vty as V
 
 import Types( Conf(..)
             , travisUser
+            , BuildState(Passed)
             , Repo(..)
             , repos)
 import Ui( CustomEvent(..)
@@ -27,7 +28,7 @@ dummyRepos = [
         Repo {
                _slug = Just "myslug"
              , _description = Just "mydescription"
-             , _last_build_state = Just "mylastbuildstate"
+             , _last_build_state = Just Passed
              , _last_build_number = Just "mylastbuildnumber"
              , _last_build_duration = Just 20
              , _last_build_finished_at = Just "myfinishedat"

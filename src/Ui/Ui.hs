@@ -29,7 +29,13 @@ import Brick.Main (
     , halt
     , continue
     )
-import Types(Repo,  slug, description, Conf, travisUser)
+import Types( Repo
+            ,  slug
+            , description
+            , last_build_state
+            , BuildState(Unknown)
+            , Conf
+            , travisUser)
 
 data AppState = 
     AppState { _conf :: Conf
@@ -54,7 +60,7 @@ repoUI repos
         renderRepo repo = txt $ T.concat 
             [ fromMaybe "-" (repo ^. slug)
             , " . " 
-            , fromMaybe "-" (repo ^. description)]
+            , T.pack . show . fromMaybe Unknown $ repo ^. last_build_state]
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
