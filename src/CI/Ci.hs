@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Ci where
+module Ci (
+    checkCIServers
+)where
 
 import Control.Monad(forever)
 import Control.Concurrent(Chan, writeChan, threadDelay)
