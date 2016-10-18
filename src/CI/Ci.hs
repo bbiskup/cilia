@@ -2,6 +2,8 @@
 
 module Ci where
 
+import Control.Monad(forever)
+import Control.Concurrent(Chan, writeChan, threadDelay)
 import qualified Data.Text.Format as TF
 import qualified Data.List as L
 --import Lens.Micro.TH(makeLenses)
@@ -16,7 +18,8 @@ import Data.Aeson.Lens(key, _String, _Array)
 import Lens.Micro((^.), (^?), (.~), (&), (^..))
 import Network.Wreq
 
-import Types(ReposResponse(..), render)
+import Types(Conf, ReposResponse(..), render, travisUser)
+import Ui(CustomEvent(..))
 
 type Resp = Response (ReposResponse)
 
@@ -36,11 +39,14 @@ getResp userName = do
     --let (Response result) = r
     return $ Just $ r ^. responseBody
 
-main' :: IO ()
-main' = do
-    r <- fmap fromJust $ getResp "bbiskup"
-    let repos' = repos $ r
-        reposTxt = L.sort . fmap render $ repos'
-    --print $ "Repo 0: " ++ (TL.unpack $ (render $ repos' !! 0))
-    mapM_ print reposTxt
-    return ()
+checkInterval :: Int 
+checkInterval = 5 * 1000000
+
+
+checkCIServers :: Conf -> Chan CustomEvent -> IO ()
+checkCIServers conf chan = forever $ do
+    r <- fmap fromJust $ Ci.getResp $ conf ^. travisUser
+    let repos' = repos r 
+    -- putStrLn $ "Repos" ++ (show repos')
+    writeChan chan $ ReposUpdate $ repos' 
+    threadDelay checkInterval

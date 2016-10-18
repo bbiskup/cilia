@@ -40,7 +40,7 @@ data Repo =
          , _last_build_state :: Maybe BuildState 
          , _last_build_number :: Maybe T.Text
          , _last_build_duration :: Maybe Int
-         , _last_build_finished_at :: Maybe T.Text 
+         , _last_build_finished_at :: Maybe T.Text
     }deriving(Ord, Eq, Show)
 
 instance FromJSON Repo where
