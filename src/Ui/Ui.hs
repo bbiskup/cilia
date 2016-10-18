@@ -76,7 +76,7 @@ colorRepo r = case buildState of
 theMap :: AttrMap
 theMap = attrMap V.defAttr
     [ ("build.passed",      V.white `on` V.green)
-    , ("build.failed",      V.yellow `on` V.red)
+    , ("build.failed",      V.white `on` V.red)
     , ("build.unknown",     V.white `on` V.black)
     ]
 
