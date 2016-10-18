@@ -37,10 +37,10 @@ instance FromJSON BuildState where
 data Repo =
     Repo { _slug :: Maybe T.Text
          , _description :: Maybe T.Text
-         , _last_build_state :: Maybe BuildState 
-         , _last_build_number :: Maybe T.Text
-         , _last_build_duration :: Maybe Int
-         , _last_build_finished_at :: Maybe T.Text
+         , _lastBuildState :: Maybe BuildState 
+         , _lastBuildNumber :: Maybe T.Text
+         , _lastBuildDuration :: Maybe Int
+         , _lastBuildFinishedAt :: Maybe T.Text
     }deriving(Ord, Eq, Show)
 
 instance FromJSON Repo where

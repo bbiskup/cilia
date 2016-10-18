@@ -32,7 +32,7 @@ import Brick.Main (
 import Types( Repo
             ,  slug
             , description
-            , last_build_state
+            , lastBuildState
             , BuildState(..)
             , Conf
             , travisUser)
@@ -63,7 +63,7 @@ repoUI repos
         repoTxt repo = T.concat 
             [ fromMaybe "-" (repo ^. slug)
             , " . " 
-            , T.pack . show . fromMaybe Unknown $ repo ^. last_build_state]
+            , T.pack . show . fromMaybe Unknown $ repo ^. lastBuildState]
 
 colorRepo :: Repo -> AttrName
 colorRepo r = case buildState of
@@ -71,7 +71,7 @@ colorRepo r = case buildState of
     Failed -> "build.failed"
     Unknown -> "build.unknown"
 
-    where buildState = fromMaybe Unknown (r ^. last_build_state)
+    where buildState = fromMaybe Unknown (r ^. lastBuildState)
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr

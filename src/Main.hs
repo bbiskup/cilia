@@ -25,10 +25,10 @@ dummyRepos = [
         Repo {
                _slug = Just "myslug"
              , _description = Just "mydescription"
-             , _last_build_state = Just Passed
-             , _last_build_number = Just "mylastbuildnumber"
-             , _last_build_duration = Just 20
-             , _last_build_finished_at = Just "myfinishedat"
+             , _lastBuildState = Just Passed
+             , _lastBuildNumber = Just "mylastbuildnumber"
+             , _lastBuildDuration = Just 20
+             , _lastBuildFinishedAt = Just "myfinishedat"
              }
         ]
 
