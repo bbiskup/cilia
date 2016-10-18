@@ -1,19 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Data.Maybe(fromJust)
-import Control.Monad(void, forever)
-import Control.Concurrent(Chan, newChan, forkIO)
+import Control.Monad(void)
+import Control.Concurrent(newChan, forkIO)
 import Lens.Micro((^.))
 import Data.Default(def)
 import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 
 import Types( Conf(..)
-            , travisUser
+            -- , travisUser
             , BuildState(Passed)
-            , Repo(..)
-            , repos)
+            , Repo(..))
 import Ui( AppState(..)
          , conf
          , app)
@@ -47,5 +45,5 @@ initialState = Ui.AppState
 main :: IO ()
 main = do
     chan <- newChan
-    ciThread <- forkIO $ Ci.checkCIServers (initialState ^. conf) chan
+    _ <- forkIO $ Ci.checkCIServers (initialState ^. conf) chan
     void $ customMain (V.mkVty def) chan app initialState
