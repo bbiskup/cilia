@@ -3,35 +3,29 @@
 
 module Ui where
 
+import Prelude
 import qualified Data.Text as T
 import Data.Maybe(fromMaybe)
 import Data.List(sort)
-import Data.Monoid((<>))
-import Data.Text.Markup((@@))
-import Lens.Micro((&), (^.), (.~), (%~))
+import Lens.Micro((&), (^.), (.~))
 import Lens.Micro.TH (makeLenses)
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
 import Brick.Markup(markup, (@?))
-import Brick.Util (on, fg)
+import Brick.Util (on)
 import Brick.Widgets.Core(
-      (<+>)
-    , (<=>)
-    , txt
+      txt
     , vBox
     )
 import Brick.AttrMap (attrMap, AttrMap, AttrName)
 import Brick.Main (
       App(..)
-    , defaultMain
-    , resizeOrQuit
     , showFirstCursor
     , halt
     , continue
     )
 import Types( Repo
             ,  slug
-            , description
             , lastBuildState
             , active
             , BuildState(..)
@@ -56,8 +50,8 @@ ui st = [vBox [hello, repoUI activeRepos]]
                                , st ^. conf . travisUser]
 
 repoUI :: [Repo]-> BT.Widget ()
-repoUI repos 
-    | not (null repos)  = vBox . fmap renderRepo . sort $ repos
+repoUI repos' 
+    | not (null repos')  = vBox . fmap renderRepo . sort $ repos'
     | otherwise = txt "no repos" 
     where
         renderRepo repo =  markup (repoTxt repo @? colorRepo repo)
