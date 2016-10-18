@@ -33,6 +33,7 @@ import Types( Repo
             ,  slug
             , description
             , lastBuildState
+            , active
             , BuildState(..)
             , Conf
             , travisUser)
@@ -48,9 +49,11 @@ makeLenses ''AppState
 
 
 ui :: AppState -> [BT.Widget ()]
-ui st = [vBox [hello, repoUI $ st ^. repos]]
-    where hello = txt $ T.concat [ "Hello "
-                                  , st ^. conf . travisUser]
+ui st = [vBox [hello, repoUI $ activeRepos]]
+    where 
+        activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
+        hello = txt $ T.concat [ "Hello "
+                               , st ^. conf . travisUser]
 
 repoUI :: [Repo]-> BT.Widget ()
 repoUI repos 

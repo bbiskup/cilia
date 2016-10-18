@@ -41,6 +41,7 @@ data Repo =
          , _lastBuildNumber :: Maybe T.Text
          , _lastBuildDuration :: Maybe Int
          , _lastBuildFinishedAt :: Maybe T.Text
+         , _active :: Maybe Bool
     }deriving(Ord, Eq, Show)
 
 instance FromJSON Repo where
@@ -50,7 +51,8 @@ instance FromJSON Repo where
              <*> o .:? "last_build_state"
              <*> o .:? "last_build_number"
              <*> o .:? "last_build_duration"
-             <*> o .:? "_last_build_finished_at"
+             <*> o .:? "last_build_finished_at"
+             <*> o.:? "active"
 
 makeLenses ''Repo
 

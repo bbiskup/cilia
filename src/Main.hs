@@ -29,6 +29,7 @@ dummyRepos = [
              , _lastBuildNumber = Just "mylastbuildnumber"
              , _lastBuildDuration = Just 20
              , _lastBuildFinishedAt = Just "myfinishedat"
+             , _active = Just True
              }
         ]
 
