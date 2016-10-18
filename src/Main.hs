@@ -4,6 +4,7 @@ module Main where
 import Prelude
 import Control.Monad(void)
 import Control.Concurrent(newChan, forkIO)
+import Data.Time.Clock(getCurrentTime)
 import Lens.Micro((^.))
 import Data.Default(def)
 import Brick.Main(customMain)
@@ -35,16 +36,20 @@ dummyRepos = [
 staticConf :: Conf
 staticConf = Conf { _travisUser = "bbiskup"}
 
-initialState :: Ui.AppState
-initialState = Ui.AppState 
-    { _conf = staticConf
-    , _stLastVtyEvent = Nothing
-    , _repos = []
-    }
+initialState :: IO Ui.AppState
+initialState = do 
+    timestamp <- getCurrentTime
+    return Ui.AppState 
+        { _conf = staticConf
+        , _stLastVtyEvent = Nothing
+        , _repos = []
+        , _timestamp = timestamp
+        }
 
 
 main :: IO ()
 main = do
     chan <- newChan
-    _ <- forkIO $ Ci.checkCIServers (initialState ^. conf) chan
-    void $ customMain (V.mkVty def) chan app initialState
+    initialState' <- initialState
+    _ <- forkIO $ Ci.checkCIServers (initialState' ^. conf) chan
+    void $ customMain (V.mkVty def) chan app initialState'

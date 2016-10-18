@@ -6,9 +6,11 @@ module Ui where
 import Prelude
 import qualified Data.Text as T
 import Data.Maybe(fromMaybe)
+import Control.Monad.IO.Class(liftIO)
 import Data.List(sort)
 import Lens.Micro((&), (^.), (.~))
 import Lens.Micro.TH (makeLenses)
+import Data.Time.Clock(getCurrentTime, UTCTime)
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
 import Brick.Markup(markup, (@?))
@@ -36,10 +38,14 @@ data AppState =
     AppState { _conf :: Conf
              , _stLastVtyEvent :: Maybe V.Event 
              , _repos :: [Repo]
-             }
+             , _timestamp :: UTCTime
+}
     deriving (Eq, Show)
 
 makeLenses ''AppState
+
+getDateStr :: IO String
+getDateStr = fmap show getCurrentTime
 
 
 ui :: AppState -> [BT.Widget ()]
@@ -82,11 +88,12 @@ data CustomEvent = VtyEvent V.Event
 
 
 appEvent :: AppState -> CustomEvent -> BT.EventM () (BT.Next AppState)
-appEvent st e =
+appEvent st e = do
+    timestamp' <- liftIO getCurrentTime
     case e of
         VtyEvent (V.EvKey V.KEsc []) -> halt st
         VtyEvent ev -> continue $ st & stLastVtyEvent .~ Just ev
-        (ReposUpdate newRepos) -> continue $ st & repos .~ newRepos
+        (ReposUpdate newRepos) -> continue $ st & (repos .~ newRepos) . (timestamp .~ timestamp')
 
 
 app :: App AppState CustomEvent ()

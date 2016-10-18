@@ -71,9 +71,11 @@ executable cilia
                      , lens-aeson == 1.0.0.5
                      , microlens == 0.4.7.0
                      , microlens-th == 0.4.1.0
+                     , time == 1.5.0.1
                      , wreq == 0.4.1.0
                      , vty == 5.11
                      , data-default == 0.7.1.1
+                     , transformers == 0.4.2.0
                      , brick == 0.10
                      , hlint == 1.9.37
   

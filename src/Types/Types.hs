@@ -13,7 +13,6 @@ import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Format as TF
 import Data.Aeson( FromJSON(..)
-                 , ToJSON
                  , withObject
                  , (.:?)
                  , (.:))
