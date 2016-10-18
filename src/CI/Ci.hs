@@ -4,23 +4,17 @@ module Ci (
     checkCIServers
 )where
 
+import Prelude
+import Data.Maybe(fromJust)
 import Control.Monad(forever)
 import Control.Concurrent(Chan, writeChan, threadDelay)
 import qualified Data.Text.Format as TF
-import qualified Data.List as L
---import Lens.Micro.TH(makeLenses)
-import Data.Maybe(fromJust, fromMaybe)
-import qualified Data.Map as M
-import qualified Data.Vector as V
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
-import qualified Data.Text.IO as DTI
-import Data.Aeson(FromJSON, Value(..))
-import Data.Aeson.Lens(key, _String, _Array)
-import Lens.Micro((^.), (^?), (.~), (&), (^..))
+import Lens.Micro((^.), (.~), (&))
 import Network.Wreq
 
-import Types(Conf, ReposResponse(..), render, travisUser)
+import Types(Conf, ReposResponse(..), travisUser)
 import Ui(CustomEvent(..))
 
 type Resp = Response ReposResponse
@@ -36,8 +30,8 @@ getResp userName = do
     --r <- getWith opts "https://api.travis-ci.org/repos/bbiskup" 
     --let repos = r ^. responseBody . key "repos" . _Array
 
-    let reposUrl = TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName)
-    r <- asJSON =<< getWith opts "https://api.travis-ci.org/repos/bbiskup" :: IO Resp
+    let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName)
+    r <- asJSON =<< getWith opts reposUrl :: IO Resp
     --let (Response result) = r
     return $ Just $ r ^. responseBody
 

@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import Prelude
 import Control.Monad(void)
 import Control.Concurrent(newChan, forkIO)
 import Lens.Micro((^.))

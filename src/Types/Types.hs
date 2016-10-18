@@ -4,6 +4,7 @@
 
 module Types where
 
+import Prelude
 import Data.Maybe(fromMaybe)
 import GHC.Generics
 import Lens.Micro((^.))
