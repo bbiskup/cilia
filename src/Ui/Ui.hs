@@ -49,7 +49,7 @@ makeLenses ''AppState
 
 
 ui :: AppState -> [BT.Widget ()]
-ui st = [vBox [hello, repoUI $ activeRepos]]
+ui st = [vBox [hello, repoUI activeRepos]]
     where 
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
         hello = txt $ T.concat [ "Hello "
