@@ -29,10 +29,10 @@ import Brick.Main (
     , halt
     , continue
     )
-import Types(Repo,  slug, description)
+import Types(Repo,  slug, description, Conf, travisUser)
 
 data AppState = 
-    AppState { _travisUser :: T.Text
+    AppState { _conf :: Conf
              , _stLastVtyEvent :: Maybe V.Event 
              , _repos :: [Repo]
              }
@@ -44,7 +44,7 @@ makeLenses ''AppState
 ui :: AppState -> [BT.Widget ()]
 ui st = [vBox [hello, repoUI $ st ^. repos]]
     where hello = txt $ T.concat [ "Hello "
-                                  , st ^. travisUser]
+                                  , st ^. conf . travisUser]
 
 repoUI :: [Repo]-> BT.Widget ()
 repoUI repos 
