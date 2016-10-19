@@ -11,6 +11,7 @@ import Data.List(sort)
 import Lens.Micro((&), (^.), (.~))
 import Lens.Micro.TH (makeLenses)
 import Data.Time.Clock(getCurrentTime, UTCTime)
+import Data.Time.Format(defaultTimeLocale, formatTime)
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
 import Brick.Markup(markup, (@?))
@@ -77,7 +78,7 @@ repoUI repos'
 
 timestampUI :: UTCTime -> BT.Widget ()
 timestampUI ts = markup (timestampStr @? "status.normal")
-    where timestampStr = T.pack . show $ ts 
+    where timestampStr = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
 
 colorRepo :: Repo -> AttrName
 colorRepo r = case buildState of
