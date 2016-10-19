@@ -30,6 +30,7 @@ import Brick.Main (
     , halt
     , continue
     )
+import qualified Brick.Widgets.Center as BWC 
 import Types( Repo
             ,  slug
             , lastBuildState
@@ -65,7 +66,7 @@ ui st =
     where
         statusBar' = statusBar (st ^. timestamp)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
-        header = markup $ headerTxt @? "status.normal"
+        header = BWC.hCenter $ markup $ headerTxt @? "status.normal"
             where headerTxt = T.concat [ "Travis projects for "
                                , st ^. conf . travisUser]
 
@@ -87,16 +88,21 @@ timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts
 
 -- Fill horizontal space (custom widget)
 stretchHFill :: Char -> BT.Widget n
-stretchHFill ch = hBox[txt "left", fWidget, txt "right"]
-    where fWidget = BT.Widget BT.Greedy BT.Fixed $ do
+stretchHFill ch = hBox[fWidget]
+    where
+        fWidget = BT.Widget BT.Greedy BT.Fixed $ do
             ctx <- BT.getContext
             let a = ctx ^. (BT.attrL)
             return $ BT.Result (V.charFill a ch (BT.availWidth ctx) 1) [] []
 
 statusBar :: UTCTime -> BT.Widget ()
-statusBar ts = withAttr "status.normal" $ hBox[txt "nix", stretchHFill ' ', txt timePart]
-  where timePart = T.pack . flip padStr 20 . T.unpack . timestampTxt $ ts
-
+statusBar ts = withAttr "status.normal" $ hBox[
+      spacer
+    , stretchHFill ' '
+    , txt $ timestampTxt ts
+    , spacer
+    ]
+    where spacer = txt " " 
 
 colorRepo :: Repo -> AttrName
 colorRepo r = case buildState of
