@@ -11,6 +11,7 @@
  * use different colors for author/repo/build status?
  * tabular alignment of repo names and build status
  * sort by last build timestamp, in descending order
+ * apply timezone when displaying timestamps
 
 ## General
 * read config?
@@ -19,3 +20,4 @@
 * accept command line parameters?
 * username from config (Main.hs)
 * introduce lifecycle states to indicate initial loading of data
+
