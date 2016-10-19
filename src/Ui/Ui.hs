@@ -14,7 +14,6 @@ import Data.Time.Clock(getCurrentTime, UTCTime)
 import Data.Time.Format(defaultTimeLocale, formatTime)
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
-import Brick.Markup(markup, (@?))
 import Brick.Util (on)
 import Brick.Widgets.Core(
       txt
@@ -80,7 +79,12 @@ repoUI repos'
     | not (null repos')  = vBox . fmap renderRepo . sort $ repos'
     | otherwise = txt "no repos" 
     where
-        renderRepo repo =  markup (repoTxt repo @? colorRepo repo)
+        renderRepo repo = withAttr (colorRepo repo) $ hBox  
+            [ txt " " 
+            , txt . repoTxt $ repo
+            , spaceFill'
+            ]
+            where spaceFill' = stretchHFill ' '
 
         repoTxt :: Repo -> T.Text
         repoTxt repo = T.concat 
