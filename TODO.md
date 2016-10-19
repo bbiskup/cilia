@@ -12,6 +12,7 @@
  * tabular alignment of repo names and build status
  * sort by last build timestamp, in descending order
  * apply timezone when displaying timestamps
+ * summary counts in status bar
 
 ## General
 * read config?
