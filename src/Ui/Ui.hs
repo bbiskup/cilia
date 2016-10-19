@@ -12,6 +12,7 @@ import Lens.Micro((&), (^.), (.~))
 import Lens.Micro.TH (makeLenses)
 import Data.Time.Clock(getCurrentTime, UTCTime)
 import Data.Time.Format(defaultTimeLocale, formatTime)
+import Data.Time.Format.Human as TFH
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
 import Brick.Util (on)
@@ -33,6 +34,7 @@ import qualified Brick.Widgets.Center as BWC
 import Types( Repo
             ,  slug
             , lastBuildState
+            , lastBuildFinishedAt
             , active
             , BuildState(..)
             , Conf
@@ -55,8 +57,15 @@ getDateStr = fmap show getCurrentTime
 ui :: AppState -> [BT.Widget ()]
 ui st =
     case (st ^. errMsg) of
-        Nothing -> [vBox [headerUI st, repoUI activeRepos, statusBar']]
-        (Just msg) -> [vBox [padTopBottom 1 (txt msg), statusBar']]
+        Nothing -> [vBox [ headerUI st
+                         , repoUI st activeRepos
+                         , statusBar'
+                         ]
+                    ]
+        (Just msg) -> [ vBox [ padTopBottom 1 (txt msg)
+                             , statusBar'
+                             ]
+                      ]
     where
         statusBar' = statusBar (st ^. timestamp)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
@@ -74,23 +83,31 @@ headerUI st = BWC.hCenter $ headerParts
             ]
             where spaceFill' = stretchHFill ' '
 
-repoUI :: [Repo]-> BT.Widget ()
-repoUI repos' 
+repoUI :: AppState -> [Repo]-> BT.Widget ()
+repoUI st repos' 
     | not (null repos')  = vBox . fmap renderRepo . sort $ repos'
     | otherwise = txt "no repos" 
     where
         renderRepo repo = withAttr (colorRepo repo) $ hBox  
             [ txt " " 
-            , txt . repoTxt $ repo
+            , (txt . repoTxt st) repo
             , spaceFill'
             ]
             where spaceFill' = stretchHFill ' '
 
-        repoTxt :: Repo -> T.Text
-        repoTxt repo = T.concat 
-            [ fromMaybe "-" (repo ^. slug)
-            , " . " 
-            , T.pack . show . fromMaybe Unknown $ repo ^. lastBuildState]
+repoTxt :: AppState -> Repo -> T.Text
+repoTxt st repo = T.concat 
+    [ fromMaybe "-" (repo ^. slug)
+    , " "
+    , lastBuildFinishedTxt
+    , " " 
+    , T.pack . show . fromMaybe Unknown $ repo ^. lastBuildState
+    ]
+    where
+        lastBuildFinishedTxt :: T.Text
+        lastBuildFinishedTxt = case repo ^. lastBuildFinishedAt of
+            Nothing ->  T.pack "<unknown time>"
+            (Just t) -> T.pack $ TFH.humanReadableTime' (st ^. timestamp) t
 
 timestampTxt :: UTCTime -> T.Text
 timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 

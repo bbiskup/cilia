@@ -10,16 +10,14 @@ import Data.Default(def)
 import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 
-import Types( Conf(..)
-            , BuildState(Passed)
-            , Repo(..))
+import Types(Conf(..))
 import Ui( AppState(..)
          , conf
          , app)
 import qualified Ci
 
 
-dummyRepos :: [Repo]
+{-dummyRepos :: [Repo]
 dummyRepos = [ 
         Repo {
                _slug = Just "myslug"
@@ -31,7 +29,7 @@ dummyRepos = [
              , _active = Just True
              }
         ]
-
+-}
 staticConf :: Conf
 staticConf = Conf { _travisUser = "bbiskup"}
 

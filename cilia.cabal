@@ -78,6 +78,8 @@ executable cilia
                      , transformers == 0.4.2.0
                      , bytestring == 0.10.6.0
                      , http-client == 0.4.31.1
+                     , friendly-time == 0.4
+                     , iso8601-time == 0.1.4
                      , brick == 0.10
                      , hlint == 1.9.37
   

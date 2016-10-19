@@ -9,6 +9,8 @@
  * optional compact view (no linebreaks)?
  * show human-friendly refresh date
  * use different colors for author/repo/build status?
+ * tabular alignment of repo names and build status
+ * show last build date (human-friendly)
 
 ## General
 * read config?

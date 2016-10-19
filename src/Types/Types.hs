@@ -12,6 +12,8 @@ import Lens.Micro.TH(makeLenses)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Format as TF
+import Data.Time.Clock(UTCTime)
+import Data.Time.ISO8601 as TI
 import Data.Aeson( FromJSON(..)
                  , withObject
                  , (.:?)
@@ -40,7 +42,7 @@ data Repo =
          , _lastBuildState :: Maybe BuildState 
          , _lastBuildNumber :: Maybe T.Text
          , _lastBuildDuration :: Maybe Int
-         , _lastBuildFinishedAt :: Maybe T.Text
+         , _lastBuildFinishedAt :: Maybe UTCTime
          , _active :: Maybe Bool
     }deriving(Ord, Eq, Show)
 
@@ -51,8 +53,13 @@ instance FromJSON Repo where
              <*> o .:? "last_build_state"
              <*> o .:? "last_build_number"
              <*> o .:? "last_build_duration"
-             <*> o .:? "last_build_finished_at"
+             <*> (fmap parseTimestamp (o .:? "last_build_finished_at"))
              <*> o.:? "active"
+       where
+         parseTimestamp :: Maybe String -> Maybe UTCTime
+         parseTimestamp tsStr = case tsStr of 
+            Nothing -> Nothing
+            (Just ts) -> TI.parseISO8601 ts
 
 makeLenses ''Repo
 
