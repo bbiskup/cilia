@@ -28,12 +28,8 @@ opts = defaults & header "Accept" .~ ["application/vnd.travis-ci.2+json"]
 
 getResp :: T.Text -> IO (Maybe ReposResponse)
 getResp userName = do
-    --r <- getWith opts "https://api.travis-ci.org/repos/bbiskup" 
-    --let repos = r ^. responseBody . key "repos" . _Array
-
     let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName)
     r <- asJSON =<< getWith opts reposUrl :: IO Resp
-    --let (Response result) = r
     return $ Just $ r ^. responseBody
 
 checkInterval :: Int 
@@ -44,6 +40,5 @@ checkCIServers :: Conf -> Chan CustomEvent -> IO ()
 checkCIServers conf chan = forever $ do
     r <- fmap fromJust $ Ci.getResp $ conf ^. travisUser
     let repos' = repos r 
-    -- putStrLn $ "Repos" ++ (show repos')
     writeChan chan $ ReposUpdate repos' 
     threadDelay checkInterval

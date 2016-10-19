@@ -11,7 +11,6 @@ import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 
 import Types( Conf(..)
-            -- , travisUser
             , BuildState(Passed)
             , Repo(..))
 import Ui( AppState(..)
