@@ -75,7 +75,7 @@ headerUI st = BWC.hCenter  headerParts
     where
         headerTxt :: T.Text
         headerTxt = T.concat [ "Travis projects for "
-                                   , st ^. conf . travisUser]
+                             , st ^. conf . travisUser]
         headerParts = withAttr "status.normal" $ hBox 
             [ spaceFill'
             , txt headerTxt 
