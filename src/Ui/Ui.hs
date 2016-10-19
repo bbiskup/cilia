@@ -16,8 +16,7 @@ import qualified Brick.Types as BT
 import Brick.Markup(markup, (@?))
 import Brick.Util (on)
 import Brick.Widgets.Core(
-      str
-    , txt
+      txt
     , vBox
     , padTopBottom
     )
