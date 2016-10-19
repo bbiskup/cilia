@@ -10,7 +10,7 @@
  * show human-friendly refresh date
  * use different colors for author/repo/build status?
  * tabular alignment of repo names and build status
- * show last build date (human-friendly)
+ * sort by last build timestamp, in descending order
 
 ## General
 * read config?
