@@ -1,8 +1,6 @@
 # TODO
 
 ## Backends
-* catch exception when fetching response
-  (avoid termination of thread)
 
 ## UI
  * scrolling (list)
