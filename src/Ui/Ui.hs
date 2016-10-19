@@ -53,12 +53,13 @@ getDateStr = fmap show getCurrentTime
 ui :: AppState -> [BT.Widget ()]
 ui st =
     case (st ^. errMsg) of
-        Nothing -> [vBox [hello, repoUI activeRepos, tsUI]]
+        Nothing -> [vBox [header, repoUI activeRepos, tsUI]]
         (Just msg) -> [vBox [padTopBottom 1 (txt msg), tsUI]]
     where
         tsUI = timestampUI (st ^. timestamp)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
-        hello = txt $ T.concat [ "Hello "
+        header = markup $ headerTxt @? "status.normal"
+            where headerTxt = T.concat [ "Travis projects for "
                                , st ^. conf . travisUser]
 
 repoUI :: [Repo]-> BT.Widget ()
