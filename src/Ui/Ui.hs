@@ -124,6 +124,7 @@ stretchHFill ch = hBox[fWidget]
 statusBar :: UTCTime -> BT.Widget ()
 statusBar ts = withAttr "status.normal" $ hBox[
       spacer
+    , txt "ESC to quit"
     , stretchHFill ' '
     , txt $ timestampTxt ts
     , spacer
