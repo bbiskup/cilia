@@ -19,6 +19,7 @@ import Brick.Widgets.Core(
       str
     , txt
     , vBox
+    , padTopBottom
     )
 import Brick.AttrMap (attrMap, AttrMap, AttrName)
 import Brick.Main (
@@ -54,7 +55,7 @@ ui :: AppState -> [BT.Widget ()]
 ui st =
     case (st ^. errMsg) of
         Nothing -> [vBox [hello, repoUI activeRepos, tsUI]]
-        (Just msg) -> [vBox [txt msg, tsUI]]
+        (Just msg) -> [vBox [padTopBottom 1 (txt msg), tsUI]]
     where
         tsUI = timestampUI (st ^. timestamp)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
