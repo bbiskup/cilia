@@ -157,8 +157,13 @@ appEvent st e = do
     case e of
         VtyEvent (V.EvKey V.KEsc []) -> halt st
         VtyEvent ev -> continue $ st & stLastVtyEvent .~ Just ev
-        (ReposUpdate newRepos) -> continue $ st & (repos .~ newRepos) . (timestamp .~ timestamp') . (errMsg .~ Nothing)
-        (NetworkError errMsg') -> continue $ st & (errMsg .~ Just errMsg') . (timestamp .~ timestamp')
+        (ReposUpdate newRepos) -> continue $ st 
+            & (repos .~ newRepos) 
+            . (timestamp .~ timestamp') 
+            . (errMsg .~ Nothing)
+        (NetworkError errMsg') -> continue $ st 
+            & (errMsg .~ Just errMsg') 
+            . (timestamp .~ timestamp')
 
 
 app :: App AppState CustomEvent ()
