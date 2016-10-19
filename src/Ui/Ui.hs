@@ -53,11 +53,6 @@ makeLenses ''AppState
 getDateStr :: IO String
 getDateStr = fmap show getCurrentTime
 
-padStr :: String -> Int -> String
-padStr s n = p ++ s ++ p
-  where p = take n . repeat $ ' '
-
-
 ui :: AppState -> [BT.Widget ()]
 ui st =
     case (st ^. errMsg) of
