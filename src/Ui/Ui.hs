@@ -18,8 +18,10 @@ import Brick.Markup(markup, (@?))
 import Brick.Util (on)
 import Brick.Widgets.Core(
       txt
+    , hBox
     , vBox
     , padTopBottom
+    , withAttr
     )
 import Brick.AttrMap (attrMap, AttrMap, AttrName)
 import Brick.Main (
@@ -50,14 +52,18 @@ makeLenses ''AppState
 getDateStr :: IO String
 getDateStr = fmap show getCurrentTime
 
+padStr :: String -> Int -> String
+padStr s n = p ++ s ++ p
+  where p = take n . repeat $ ' '
+
 
 ui :: AppState -> [BT.Widget ()]
 ui st =
     case (st ^. errMsg) of
-        Nothing -> [vBox [header, repoUI activeRepos, tsUI]]
-        (Just msg) -> [vBox [padTopBottom 1 (txt msg), tsUI]]
+        Nothing -> [vBox [header, repoUI activeRepos, statusBar']]
+        (Just msg) -> [vBox [padTopBottom 1 (txt msg), statusBar']]
     where
-        tsUI = timestampUI (st ^. timestamp)
+        statusBar' = statusBar (st ^. timestamp)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
         header = markup $ headerTxt @? "status.normal"
             where headerTxt = T.concat [ "Travis projects for "
@@ -76,9 +82,21 @@ repoUI repos'
             , " . " 
             , T.pack . show . fromMaybe Unknown $ repo ^. lastBuildState]
 
-timestampUI :: UTCTime -> BT.Widget ()
-timestampUI ts = markup (timestampStr @? "status.normal")
-    where timestampStr = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
+timestampTxt :: UTCTime -> T.Text
+timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
+
+-- Fill horizontal space (custom widget)
+stretchHFill :: Char -> BT.Widget n
+stretchHFill ch = hBox[txt "left", fWidget, txt "right"]
+    where fWidget = BT.Widget BT.Greedy BT.Fixed $ do
+            ctx <- BT.getContext
+            let a = ctx ^. (BT.attrL)
+            return $ BT.Result (V.charFill a ch (BT.availWidth ctx) 1) [] []
+
+statusBar :: UTCTime -> BT.Widget ()
+statusBar ts = withAttr "status.normal" $ hBox[txt "nix", stretchHFill ' ', txt timePart]
+  where timePart = T.pack . flip padStr 20 . T.unpack . timestampTxt $ ts
+
 
 colorRepo :: Repo -> AttrName
 colorRepo r = case buildState of
