@@ -53,7 +53,7 @@ instance FromJSON Repo where
              <*> o .:? "last_build_state"
              <*> o .:? "last_build_number"
              <*> o .:? "last_build_duration"
-             <*> (fmap parseTimestamp (o .:? "last_build_finished_at"))
+             <*> fmap parseTimestamp (o .:? "last_build_finished_at")
              <*> o.:? "active"
        where
          parseTimestamp :: Maybe String -> Maybe UTCTime

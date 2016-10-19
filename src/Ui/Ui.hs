@@ -56,7 +56,7 @@ getDateStr = fmap show getCurrentTime
 
 ui :: AppState -> [BT.Widget ()]
 ui st =
-    case (st ^. errMsg) of
+    case st ^. errMsg of
         Nothing -> [vBox [ headerUI st
                          , repoUI st activeRepos
                          , statusBar'
@@ -71,7 +71,7 @@ ui st =
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
 
 headerUI :: AppState -> BT.Widget ()
-headerUI st = BWC.hCenter $ headerParts 
+headerUI st = BWC.hCenter  headerParts 
     where
         headerTxt :: T.Text
         headerTxt = T.concat [ "Travis projects for "
@@ -118,7 +118,7 @@ stretchHFill ch = hBox[fWidget]
     where
         fWidget = BT.Widget BT.Greedy BT.Fixed $ do
             ctx <- BT.getContext
-            let a = ctx ^. (BT.attrL)
+            let a = ctx ^. BT.attrL
             return $ BT.Result (V.charFill a ch (BT.availWidth ctx) 1) [] []
 
 statusBar :: UTCTime -> BT.Widget ()
@@ -158,7 +158,7 @@ appEvent st e = do
         VtyEvent (V.EvKey V.KEsc []) -> halt st
         VtyEvent ev -> continue $ st & stLastVtyEvent .~ Just ev
         (ReposUpdate newRepos) -> continue $ st & (repos .~ newRepos) . (timestamp .~ timestamp') . (errMsg .~ Nothing)
-        (NetworkError errMsg') -> continue $ st & (errMsg .~ (Just errMsg')) . (timestamp .~ timestamp')
+        (NetworkError errMsg') -> continue $ st & (errMsg .~ Just errMsg') . (timestamp .~ timestamp')
 
 
 app :: App AppState CustomEvent ()
