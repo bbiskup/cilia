@@ -43,6 +43,7 @@ initialState = do
         , _stLastVtyEvent = Nothing
         , _repos = []
         , _timestamp = timestamp
+        , _errMsg  = Nothing
         }
 
 

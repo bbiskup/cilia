@@ -40,6 +40,7 @@ data AppState =
              , _stLastVtyEvent :: Maybe V.Event 
              , _repos :: [Repo]
              , _timestamp :: UTCTime
+             , _errMsg :: Maybe T.Text
 }
     deriving (Eq, Show)
 
@@ -50,8 +51,12 @@ getDateStr = fmap show getCurrentTime
 
 
 ui :: AppState -> [BT.Widget ()]
-ui st = [vBox [hello, repoUI activeRepos, timestampUI (st ^. timestamp)]]
-    where 
+ui st =
+    case (st ^. errMsg) of
+        Nothing -> [vBox [hello, repoUI activeRepos, tsUI]]
+        (Just msg) -> [vBox [txt msg, tsUI]]
+    where
+        tsUI = timestampUI (st ^. timestamp)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
         hello = txt $ T.concat [ "Hello "
                                , st ^. conf . travisUser]
@@ -89,6 +94,7 @@ theMap = attrMap V.defAttr
 
 data CustomEvent = VtyEvent V.Event
                  | ReposUpdate [Repo]
+                 | NetworkError T.Text
 
 
 appEvent :: AppState -> CustomEvent -> BT.EventM () (BT.Next AppState)
@@ -97,7 +103,8 @@ appEvent st e = do
     case e of
         VtyEvent (V.EvKey V.KEsc []) -> halt st
         VtyEvent ev -> continue $ st & stLastVtyEvent .~ Just ev
-        (ReposUpdate newRepos) -> continue $ st & (repos .~ newRepos) . (timestamp .~ timestamp')
+        (ReposUpdate newRepos) -> continue $ st & (repos .~ newRepos) . (timestamp .~ timestamp') . (errMsg .~ Nothing)
+        (NetworkError errMsg') -> continue $ st & (errMsg .~ (Just errMsg')) . (timestamp .~ timestamp')
 
 
 app :: App AppState CustomEvent ()

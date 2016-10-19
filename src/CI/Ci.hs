@@ -5,12 +5,14 @@ module Ci (
 )where
 
 import Prelude
-import Data.Maybe(fromJust)
+import Control.Exception as E
+import Network.HTTP.Client hiding(responseBody)
 import Control.Monad(forever)
 import Control.Concurrent(Chan, writeChan, threadDelay)
 import qualified Data.Text.Format as TF
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
+import qualified Data.ByteString.Char8 as BSC
 import Lens.Micro((^.), (.~), (&))
 import Network.Wreq
 
@@ -26,11 +28,18 @@ opts :: Options
 opts = defaults & header "Accept" .~ ["application/vnd.travis-ci.2+json"]
                         & header "User-Agent" .~ ["cilia-useragent"]
 
-getResp :: T.Text -> IO (Maybe ReposResponse)
+
+handler :: HttpException -> IO (Either String Resp)
+handler (StatusCodeException s _ _ ) = return $ Left $ BSC.unpack (s ^. statusMessage)
+handler e = return $ Left (show e)
+
+getResp :: T.Text -> IO (Either String ReposResponse)
 getResp userName = do
     let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName)
-    r <- asJSON =<< getWith opts reposUrl :: IO Resp
-    return $ Just $ r ^. responseBody
+    eitherR <- (Right <$> (asJSON =<< getWith opts reposUrl)) `E.catch` handler :: IO (Either String Resp)
+    return (case eitherR of
+        (Right r) -> Right $ r ^. responseBody
+        (Left s) -> Left s)
 
 checkInterval :: Int 
 checkInterval = 5 * 1000000
@@ -38,7 +47,12 @@ checkInterval = 5 * 1000000
 
 checkCIServers :: Conf -> Chan CustomEvent -> IO ()
 checkCIServers conf chan = forever $ do
-    r <- fmap fromJust $ Ci.getResp $ conf ^. travisUser
-    let repos' = repos r 
-    writeChan chan $ ReposUpdate repos' 
-    threadDelay checkInterval
+    r' <- Ci.getResp $ conf ^. travisUser
+    case r' of 
+        (Left s) -> do  
+            writeChan chan $ NetworkError (T.pack s)
+            threadDelay checkInterval
+        (Right r) -> do
+            let repos' = repos r 
+            writeChan chan $ ReposUpdate repos' 
+            threadDelay checkInterval
