@@ -76,7 +76,8 @@ repoUI repos'
             , T.pack . show . fromMaybe Unknown $ repo ^. lastBuildState]
 
 timestampUI :: UTCTime -> BT.Widget ()
-timestampUI ts = str . show $ ts 
+timestampUI ts = markup (timestampStr @? "status.normal")
+    where timestampStr = T.pack . show $ ts 
 
 colorRepo :: Repo -> AttrName
 colorRepo r = case buildState of
@@ -91,6 +92,7 @@ theMap = attrMap V.defAttr
     [ ("build.passed",      V.white `on` V.green)
     , ("build.failed",      V.white `on` V.red)
     , ("build.unknown",     V.white `on` V.black)
+    , ("status.normal",     V.blue `on` V.white)
     ]
 
 data CustomEvent = VtyEvent V.Event
