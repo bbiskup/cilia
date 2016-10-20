@@ -105,7 +105,7 @@ repoUI st repos'
             , spacer
             , colorBuildState $ repo ^. lastBuildState
             , spacer
-            , txt $  lastBuildFinishedTxt st repo
+            , txt .  padTxtRight (15 - T.length lastBuildFinishedTxt') $ lastBuildFinishedTxt'
             , spacer
             , txt $  T.concat[ lastBuildDurationTxt
                              , " seconds"]
@@ -116,6 +116,7 @@ repoUI st repos'
                   maxSlugLen = maximum . fmap (T.length . fromMaybe "-" . (^. slug)) $ repos'
                   slug' = fromMaybe "-" $ repo ^. slug
                   lastBuildDurationTxt = T.pack . fromMaybe " " $ (show <$> repo ^. lastBuildDuration)
+                  lastBuildFinishedTxt' = lastBuildFinishedTxt st repo
 
 nonPassCount :: [Repo] -> Int
 nonPassCount = length . filter isNotPassed
