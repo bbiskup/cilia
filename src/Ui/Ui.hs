@@ -100,7 +100,7 @@ repoUI st repos'
         cmpLastBuildFinishedAt x y =
             compare (y ^. lastBuildFinishedAt) (x ^. lastBuildFinishedAt)
         renderRepo repo =  hBox  
-            [ spacer 
+            [ txt " "
             , txt . padTxtRight (maxSlugLen - T.length slug')  $ slug'
             , spacer
             , colorBuildState $ repo ^. lastBuildState
@@ -110,7 +110,7 @@ repoUI st repos'
             , txt lastBuildDurationTxt
             , spaceFill'
             ]
-            where spacer = txt " "
+            where spacer = txt "  "
                   spaceFill' = stretchHFill ' '
                   maxSlugLen = maximum . fmap (T.length . fromMaybe "-" . (^. slug)) $ repos'
                   slug' = fromMaybe "-" $ repo ^. slug
