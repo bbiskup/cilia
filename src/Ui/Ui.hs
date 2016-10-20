@@ -9,7 +9,7 @@ import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Format as TF
 import Data.Maybe(fromMaybe)
 import Control.Monad.IO.Class(liftIO)
-import Data.List(sort)
+import Data.List(sortBy)
 import Lens.Micro((&), (^.), (.~))
 import Lens.Micro.TH (makeLenses)
 import Data.Time.Clock(getCurrentTime, UTCTime)
@@ -55,7 +55,7 @@ data AppState =
 makeLenses ''AppState
 
 getDateStr :: IO String
-getDateStr = fmap show getCurrentTime
+getDateStr = show <$> getCurrentTime
 
 padTxtRight :: Int -> T.Text -> T.Text
 padTxtRight n t  = T.pack $ s ++ p
@@ -95,9 +95,11 @@ headerUI st = BWC.hCenter  headerParts
 
 repoUI :: AppState -> [Repo]-> BT.Widget ()
 repoUI st repos' 
-    | not (null repos')  = vBox . fmap renderRepo . sort $ repos'
+    | not (null repos')  = vBox . fmap renderRepo . reverse . sortBy cmpLastBuildFinishedAt $ repos'
     | otherwise = txt "no repos" 
     where
+        cmpLastBuildFinishedAt x y =
+            compare (x ^. lastBuildFinishedAt) (y ^. lastBuildFinishedAt)
         renderRepo repo =  hBox  
             [ txt " " 
             , txt . padTxtRight (maxSlugLen - T.length slug')  $ slug'
