@@ -55,6 +55,13 @@ makeLenses ''AppState
 getDateStr :: IO String
 getDateStr = fmap show getCurrentTime
 
+padTxtRight :: Int -> T.Text -> T.Text
+padTxtRight n t  = T.pack $ s ++ p
+  where p = replicate n ' '
+        s = T.unpack t
+
+
+
 ui :: AppState -> [BT.Widget ()]
 ui st =
     case st ^. errMsg of
@@ -91,7 +98,7 @@ repoUI st repos'
     where
         renderRepo repo =  hBox  
             [ txt " " 
-            , txt . fromMaybe "-" $ repo ^. slug
+            , txt . padTxtRight (maxSlugLen - T.length slug')  $ slug'
             , txt " "
             , colorBuildState $ repo ^. lastBuildState
             , txt " "
@@ -99,6 +106,8 @@ repoUI st repos'
             , spaceFill'
             ]
             where spaceFill' = stretchHFill ' '
+                  maxSlugLen = maximum . fmap (T.length . fromMaybe "-" . (^. slug)) $ repos'
+                  slug' = fromMaybe "-" $ repo ^. slug
 
 timestampTxt :: UTCTime -> T.Text
 timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
