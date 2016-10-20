@@ -74,7 +74,7 @@ ui st = [vBox [ headerUI st
     where
         statusBar' = statusBar 
                         (st ^. timestamp) 
-                        (nonPassCount $ st ^. repos)
+                        (nonPassCount $ activeRepos)
                         (st ^. errMsg)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
 
