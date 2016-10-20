@@ -112,7 +112,7 @@ repoUI st repos'
                   slug' = fromMaybe "-" $ repo ^. slug
 
 nonPassCount :: [Repo] -> Int
-nonPassCount repos' = length . filter isNotPassed $ repos'
+nonPassCount = length . filter isNotPassed
     where isNotPassed repo =    
             let buildState = fromMaybe Unknown $ repo ^. lastBuildState in
             buildState /= Passed
@@ -146,7 +146,7 @@ statusBar ts numNotPassed = withAttr "status.normal" $ hBox[
     , spacer
     ]
     where spacer = txt " "
-          noPassCountMsg = TL.toStrict . TF.format "[{} failed/errored]" $ (TF.Only numNotPassed)
+          noPassCountMsg = TL.toStrict . TF.format "[{} failed/errored]" $ TF.Only numNotPassed
           noPassCountMsgAttr
             | numNotPassed > 0 = "status.error"
             | otherwise = "status.normal"
