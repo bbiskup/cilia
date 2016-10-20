@@ -37,6 +37,7 @@ import Types( Repo
             ,  slug
             , lastBuildState
             , lastBuildFinishedAt
+            , lastBuildDuration
             , active
             , BuildState(..)
             , Conf
@@ -99,17 +100,22 @@ repoUI st repos'
         cmpLastBuildFinishedAt x y =
             compare (y ^. lastBuildFinishedAt) (x ^. lastBuildFinishedAt)
         renderRepo repo =  hBox  
-            [ txt " " 
+            [ spacer 
             , txt . padTxtRight (maxSlugLen - T.length slug')  $ slug'
-            , txt " "
+            , spacer
             , colorBuildState $ repo ^. lastBuildState
-            , txt " "
+            , spacer
             , txt $  lastBuildFinishedTxt st repo
+            , spacer
+            , txt $  T.concat[ lastBuildDurationTxt
+                             , " seconds"]
             , spaceFill'
             ]
-            where spaceFill' = stretchHFill ' '
+            where spacer = txt " "
+                  spaceFill' = stretchHFill ' '
                   maxSlugLen = maximum . fmap (T.length . fromMaybe "-" . (^. slug)) $ repos'
                   slug' = fromMaybe "-" $ repo ^. slug
+                  lastBuildDurationTxt = T.pack . fromMaybe " " $ (show <$> repo ^. lastBuildDuration)
 
 nonPassCount :: [Repo] -> Int
 nonPassCount = length . filter isNotPassed
