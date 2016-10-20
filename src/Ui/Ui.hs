@@ -75,7 +75,7 @@ ui st = [vBox [ headerUI st
     where
         statusBar' = statusBar 
                         (st ^. timestamp) 
-                        (nonPassCount $ activeRepos)
+                        (nonPassCount activeRepos)
                         (st ^. errMsg)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
 
@@ -107,14 +107,14 @@ repoUI st repos'
             , spacer
             , txt .  padTxtRight (15 - T.length lastBuildFinishedTxt') $ lastBuildFinishedTxt'
             , spacer
-            , txt $  lastBuildDurationTxt
+            , txt lastBuildDurationTxt
             , spaceFill'
             ]
             where spacer = txt " "
                   spaceFill' = stretchHFill ' '
                   maxSlugLen = maximum . fmap (T.length . fromMaybe "-" . (^. slug)) $ repos'
                   slug' = fromMaybe "-" $ repo ^. slug
-                  lastBuildDurationTxt = fromMaybe " " $ (humanizeDuration <$> (repo ^. lastBuildDuration))
+                  lastBuildDurationTxt = fromMaybe " " (humanizeDuration <$> (repo ^. lastBuildDuration))
                   lastBuildFinishedTxt' = lastBuildFinishedTxt st repo
 
 humanizeDuration :: Int -> T.Text
