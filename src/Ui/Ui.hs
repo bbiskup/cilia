@@ -94,6 +94,8 @@ repoUI st repos'
             , txt . fromMaybe "-" $ repo ^. slug
             , txt " "
             , colorBuildState $ repo ^. lastBuildState
+            , txt " "
+            , txt $  lastBuildFinishedTxt st repo
             , spaceFill'
             ]
             where spaceFill' = stretchHFill ' '
@@ -115,6 +117,11 @@ repoTxt st repo = T.concat
 
 timestampTxt :: UTCTime -> T.Text
 timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
+
+lastBuildFinishedTxt :: AppState -> Repo -> T.Text
+lastBuildFinishedTxt st repo = case repo ^. lastBuildFinishedAt of
+    Nothing ->  T.pack "<unknown time>"
+    (Just t) -> T.pack $ TFH.humanReadableTime' (st ^. timestamp) t
 
 -- Fill horizontal space (custom widget)
 stretchHFill :: Char -> BT.Widget n
