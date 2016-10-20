@@ -16,6 +16,7 @@ import Data.Time.Format.Human as TFH
 import qualified Graphics.Vty as V
 import qualified Brick.Types as BT
 import Brick.Util (on)
+import Brick.Markup(markup, (@?))
 import Brick.Widgets.Core(
       txt
     , hBox
@@ -88,14 +89,16 @@ repoUI st repos'
     | not (null repos')  = vBox . fmap renderRepo . sort $ repos'
     | otherwise = txt "no repos" 
     where
-        renderRepo repo = withAttr (colorRepo repo) $ hBox  
+        renderRepo repo =  hBox  
             [ txt " " 
-            , (txt . repoTxt st) repo
+            , txt . fromMaybe "-" $ repo ^. slug
+            , txt " "
+            , colorBuildState $ repo ^. lastBuildState
             , spaceFill'
             ]
             where spaceFill' = stretchHFill ' '
 
-repoTxt :: AppState -> Repo -> T.Text
+{-repoTxt :: AppState -> Repo -> T.Text
 repoTxt st repo = T.concat 
     [ fromMaybe "-" (repo ^. slug)
     , " "
@@ -108,6 +111,7 @@ repoTxt st repo = T.concat
         lastBuildFinishedTxt = case repo ^. lastBuildFinishedAt of
             Nothing ->  T.pack "<unknown time>"
             (Just t) -> T.pack $ TFH.humanReadableTime' (st ^. timestamp) t
+-}
 
 timestampTxt :: UTCTime -> T.Text
 timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
@@ -131,13 +135,15 @@ statusBar ts = withAttr "status.normal" $ hBox[
     ]
     where spacer = txt " " 
 
-colorRepo :: Repo -> AttrName
-colorRepo r = case buildState of
-    Passed -> "build.passed"
-    Failed -> "build.failed"
-    Unknown -> "build.unknown"
-
-    where buildState = fromMaybe Unknown (r ^. lastBuildState)
+colorBuildState :: Maybe BuildState -> BT.Widget ()
+colorBuildState maybeBuildState = 
+    let attr = case buildState of
+                    Passed -> "build.passed"
+                    Failed -> "build.failed"
+                    Unknown -> "build.unknown"
+    in
+        markup ((T.pack . show $ buildState) @? attr)
+    where buildState = fromMaybe Unknown maybeBuildState
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
