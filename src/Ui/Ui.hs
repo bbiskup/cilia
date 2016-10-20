@@ -95,11 +95,11 @@ headerUI st = BWC.hCenter  headerParts
 
 repoUI :: AppState -> [Repo]-> BT.Widget ()
 repoUI st repos' 
-    | not (null repos')  = vBox . fmap renderRepo . reverse . sortBy cmpLastBuildFinishedAt $ repos'
+    | not (null repos')  = vBox . fmap renderRepo . sortBy cmpLastBuildFinishedAt $ repos'
     | otherwise = txt "no repos" 
     where
         cmpLastBuildFinishedAt x y =
-            compare (x ^. lastBuildFinishedAt) (y ^. lastBuildFinishedAt)
+            compare (y ^. lastBuildFinishedAt) (x ^. lastBuildFinishedAt)
         renderRepo repo =  hBox  
             [ txt " " 
             , txt . padTxtRight (maxSlugLen - T.length slug')  $ slug'
