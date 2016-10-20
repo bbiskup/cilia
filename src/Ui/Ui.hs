@@ -140,13 +140,16 @@ statusBar ts numNotPassed = withAttr "status.normal" $ hBox[
       spacer
     , txt "ESC to quit"
     , stretchHFill ' '
-    , txt noPassCountMsg
+    , markup (noPassCountMsg @? noPassCountMsgAttr)
     , spacer
     , txt $ timestampTxt ts
     , spacer
     ]
     where spacer = txt " "
           noPassCountMsg = TL.toStrict . TF.format "[{} failed/errored]" $ (TF.Only numNotPassed)
+          noPassCountMsgAttr
+            | numNotPassed > 0 = "status.error"
+            | otherwise = "status.normal"
 
 colorBuildState :: Maybe BuildState -> BT.Widget ()
 colorBuildState maybeBuildState = 
@@ -164,6 +167,7 @@ theMap = attrMap V.defAttr
     , ("build.failed",      V.white `on` V.red)
     , ("build.unknown",     V.white `on` V.black)
     , ("status.normal",     V.blue `on` V.white)
+    , ("status.error",     V.red `on` V.white)
     ]
 
 data CustomEvent = VtyEvent V.Event
