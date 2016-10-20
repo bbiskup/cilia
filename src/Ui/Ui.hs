@@ -23,7 +23,6 @@ import Brick.Widgets.Core(
       txt
     , hBox
     , vBox
-    , padTopBottom
     , withAttr
     )
 import Brick.AttrMap (attrMap, AttrMap)
@@ -43,12 +42,14 @@ import Types( Repo
             , Conf
             , travisUser)
 
+type ErrorMsg = T.Text
+
 data AppState = 
     AppState { _conf :: Conf
              , _stLastVtyEvent :: Maybe V.Event 
              , _repos :: [Repo]
              , _timestamp :: UTCTime
-             , _errMsg :: Maybe T.Text
+             , _errMsg :: Maybe ErrorMsg
 }
     deriving (Eq, Show)
 
@@ -65,19 +66,16 @@ padTxtRight n t  = T.pack $ s ++ p
 
 
 ui :: AppState -> [BT.Widget ()]
-ui st =
-    case st ^. errMsg of
-        Nothing -> [vBox [ headerUI st
+ui st = [vBox [ headerUI st
                          , repoUI st activeRepos
                          , statusBar'
                          ]
                     ]
-        (Just msg) -> [ vBox [ padTopBottom 1 (txt msg)
-                             , statusBar'
-                             ]
-                      ]
     where
-        statusBar' = statusBar (st ^. timestamp) (nonPassCount $ st ^. repos)
+        statusBar' = statusBar 
+                        (st ^. timestamp) 
+                        (nonPassCount $ st ^. repos)
+                        (st ^. errMsg)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
 
 headerUI :: AppState -> BT.Widget ()
@@ -137,12 +135,14 @@ stretchHFill ch = hBox[fWidget]
             let a = ctx ^. BT.attrL
             return $ BT.Result (V.charFill a ch (BT.availWidth ctx) 1) [] []
 
-statusBar :: UTCTime -> Int -> BT.Widget ()
-statusBar ts numNotPassed = withAttr "status.normal" $ hBox[
+statusBar :: UTCTime -> Int -> Maybe ErrorMsg -> BT.Widget ()
+statusBar ts numNotPassed maybeErrMsg = withAttr "status.normal" $ hBox[
       spacer
     , txt "ESC to quit"
     , stretchHFill ' '
     , markup (noPassCountMsg @? noPassCountMsgAttr)
+    , spacer
+    , errorPart
     , spacer
     , txt $ timestampTxt ts
     , spacer
@@ -152,6 +152,9 @@ statusBar ts numNotPassed = withAttr "status.normal" $ hBox[
           noPassCountMsgAttr
             | numNotPassed > 0 = "status.error"
             | otherwise = "status.normal"
+          errorPart = case maybeErrMsg of
+                Nothing -> txt ""
+                (Just _) -> markup ("[network error]" @? "status.error")
 
 colorBuildState :: Maybe BuildState -> BT.Widget ()
 colorBuildState maybeBuildState = 
