@@ -117,7 +117,7 @@ nonPassCount :: [Repo] -> Int
 nonPassCount = length . filter isNotPassed
     where isNotPassed repo =    
             let buildState = fromMaybe Unknown $ repo ^. lastBuildState in
-            buildState /= Passed
+            (buildState /= Passed) && (buildState /= Unknown)
 
 
 timestampTxt :: UTCTime -> T.Text
