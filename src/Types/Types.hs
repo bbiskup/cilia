@@ -36,11 +36,14 @@ instance FromJSON BuildState where
     parseJSON "passed" = return Passed
     parseJSON _ = return Unknown
 
+type BuildNumber = T.Text 
+type Slug = T.Text
+
 data Repo =
-    Repo { _slug :: Maybe T.Text
+    Repo { _slug :: Maybe Slug
          , _description :: Maybe T.Text
          , _lastBuildState :: Maybe BuildState 
-         , _lastBuildNumber :: Maybe T.Text
+         , _lastBuildNumber :: Maybe BuildNumber
          , _lastBuildDuration :: Maybe Int
          , _lastBuildFinishedAt :: Maybe UTCTime
          , _active :: Maybe Bool
