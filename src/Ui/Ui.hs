@@ -100,21 +100,6 @@ repoUI st repos'
             ]
             where spaceFill' = stretchHFill ' '
 
-{-repoTxt :: AppState -> Repo -> T.Text
-repoTxt st repo = T.concat 
-    [ fromMaybe "-" (repo ^. slug)
-    , " "
-    , lastBuildFinishedTxt
-    , " " 
-    , T.pack . show . fromMaybe Unknown $ repo ^. lastBuildState
-    ]
-    where
-        lastBuildFinishedTxt :: T.Text
-        lastBuildFinishedTxt = case repo ^. lastBuildFinishedAt of
-            Nothing ->  T.pack "<unknown time>"
-            (Just t) -> T.pack $ TFH.humanReadableTime' (st ^. timestamp) t
--}
-
 timestampTxt :: UTCTime -> T.Text
 timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
 
