@@ -5,6 +5,8 @@ module Ui where
 
 import Prelude
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as TL
+import qualified Data.Text.Format as TF
 import Data.Maybe(fromMaybe)
 import Control.Monad.IO.Class(liftIO)
 import Data.List(sort)
@@ -24,7 +26,7 @@ import Brick.Widgets.Core(
     , padTopBottom
     , withAttr
     )
-import Brick.AttrMap (attrMap, AttrMap, AttrName)
+import Brick.AttrMap (attrMap, AttrMap)
 import Brick.Main (
       App(..)
     , showFirstCursor
@@ -75,7 +77,7 @@ ui st =
                              ]
                       ]
     where
-        statusBar' = statusBar (st ^. timestamp)
+        statusBar' = statusBar (st ^. timestamp) (nonPassCount $ st ^. repos)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
 
 headerUI :: AppState -> BT.Widget ()
@@ -109,6 +111,13 @@ repoUI st repos'
                   maxSlugLen = maximum . fmap (T.length . fromMaybe "-" . (^. slug)) $ repos'
                   slug' = fromMaybe "-" $ repo ^. slug
 
+nonPassCount :: [Repo] -> Int
+nonPassCount repos' = length . filter isNotPassed $ repos'
+    where isNotPassed repo =    
+            let buildState = fromMaybe Unknown $ repo ^. lastBuildState in
+            buildState /= Passed
+
+
 timestampTxt :: UTCTime -> T.Text
 timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
 
@@ -126,15 +135,18 @@ stretchHFill ch = hBox[fWidget]
             let a = ctx ^. BT.attrL
             return $ BT.Result (V.charFill a ch (BT.availWidth ctx) 1) [] []
 
-statusBar :: UTCTime -> BT.Widget ()
-statusBar ts = withAttr "status.normal" $ hBox[
+statusBar :: UTCTime -> Int -> BT.Widget ()
+statusBar ts numNotPassed = withAttr "status.normal" $ hBox[
       spacer
     , txt "ESC to quit"
     , stretchHFill ' '
+    , txt noPassCountMsg
+    , spacer
     , txt $ timestampTxt ts
     , spacer
     ]
-    where spacer = txt " " 
+    where spacer = txt " "
+          noPassCountMsg = TL.toStrict . TF.format "[{} failed/errored]" $ (TF.Only numNotPassed)
 
 colorBuildState :: Maybe BuildState -> BT.Widget ()
 colorBuildState maybeBuildState = 
