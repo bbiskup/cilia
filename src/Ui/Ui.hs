@@ -107,16 +107,24 @@ repoUI st repos'
             , spacer
             , txt .  padTxtRight (15 - T.length lastBuildFinishedTxt') $ lastBuildFinishedTxt'
             , spacer
-            , txt $  T.concat[ lastBuildDurationTxt
-                             , " seconds"]
+            , txt $  lastBuildDurationTxt
             , spaceFill'
             ]
             where spacer = txt " "
                   spaceFill' = stretchHFill ' '
                   maxSlugLen = maximum . fmap (T.length . fromMaybe "-" . (^. slug)) $ repos'
                   slug' = fromMaybe "-" $ repo ^. slug
-                  lastBuildDurationTxt = T.pack . fromMaybe " " $ (show <$> repo ^. lastBuildDuration)
+                  lastBuildDurationTxt = fromMaybe " " $ (humanizeDuration <$> (repo ^. lastBuildDuration))
                   lastBuildFinishedTxt' = lastBuildFinishedTxt st repo
+
+humanizeDuration :: Int -> T.Text
+humanizeDuration d = TL.toStrict formatted
+    where formatted
+            | d > 86400   = TF.format "{} days" (TF.Only $ d `div` 86400)
+            | d > 3600    = TF.format "{} hours" (TF.Only $ d `div` 3600)
+            | d > 60      = TF.format "{} minutes" (TF.Only $ d `div` 60)
+            | otherwise   = TF.format "{} seconds" (TF.Only d)
+
 
 nonPassCount :: [Repo] -> Int
 nonPassCount = length . filter isNotPassed
