@@ -13,4 +13,5 @@
 * introduce lifecycle states to indicate initial loading of data
 * add command line option to generate config
 * read $HOME/.cilia.yml if no -c specified
+* default refresh interval
 

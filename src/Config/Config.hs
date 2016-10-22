@@ -4,9 +4,11 @@
 module Config where
 
 import Prelude 
+import Data.Maybe(fromMaybe)
 import qualified Data.Text as T
 import Data.Yaml( FromJSON(..)
                 , (.:)
+                , (.:?)
                 , decodeFileEither)
 import qualified Data.Yaml as Y
 import Lens.Micro.TH(makeLenses)
@@ -17,7 +19,7 @@ data DefaultSection =
 
 instance FromJSON DefaultSection where
     parseJSON (Y.Object o) = DefaultSection <$>
-        o .: "refreshInterval"
+        fmap (fromMaybe 10) (o .:? "refreshInterval")
     parseJSON _ = error "Expected travis section"
 
 makeLenses ''DefaultSection

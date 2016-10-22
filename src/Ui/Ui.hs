@@ -40,7 +40,7 @@ import Types( Repo
             , lastBuildDuration
             , active
             , BuildState(..))
-import Config(Config, defaultSection, travis, userName)
+import Config(Config, travis, userName)
 
 type ErrorMsg = T.Text
 
