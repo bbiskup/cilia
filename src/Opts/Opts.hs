@@ -8,6 +8,7 @@ import qualified Data.Text as T
 import System.Environment as E
 import qualified Path as P
 import Path((</>))
+import qualified System.Directory as D
 import Options.Applicative
     ( Parser
     , strOption
@@ -26,12 +27,16 @@ defaultConfigFilePath :: IO FilePath
 defaultConfigFilePath = do
     homeDir <- E.lookupEnv "HOME"
     defaultConfigFileName <- P.parseRelFile "cilia.yml"
+    let noConfigFile = "<no config file>"
     case homeDir of
-        Nothing -> 
-            return $ P.toFilePath defaultConfigFileName
+        Nothing -> return noConfigFile
         (Just homeDirStr) -> do
             homeDir' <- P.parseAbsDir homeDirStr
-            return $ P.toFilePath $ homeDir' </> defaultConfigFileName
+            let configInHome = P.toFilePath $ homeDir' </> defaultConfigFileName
+            doesExistInHome <- D.doesFileExist configInHome 
+            if doesExistInHome 
+            then return configInHome
+            else return noConfigFile
 
 optsParser :: IO (Parser Opts)
 optsParser = do
