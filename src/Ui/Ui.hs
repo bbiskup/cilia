@@ -182,9 +182,9 @@ colorBuildState maybeBuildState =
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
-    [ ("build.passed",      V.white `on` V.green)
-    , ("build.failed",      V.white `on` V.red)
-    , ("build.unknown",     V.white `on` V.black)
+    [ ("build.passed",      V.black `on` V.green)
+    , ("build.failed",      V.black `on` V.red)
+    , ("build.unknown",     V.black `on` V.white)
     , ("status.normal",     V.blue `on` V.white)
     , ("status.error",     V.red `on` V.white)
     ]
