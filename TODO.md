@@ -5,7 +5,6 @@
 ## UI
  * scrolling (list)
  * apply timezone when displaying timestamps
- * show proper error when incorrect username
 
 ## General
 * read config
