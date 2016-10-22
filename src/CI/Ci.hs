@@ -18,7 +18,7 @@ import Network.Wreq
 
 import Types(ReposResponse(..))
 import Ui(CustomEvent(..))
-import Config(Config, travis, userName)
+import Config(Config, travis, userName, defaultSection, refreshInterval)
 
 type Resp = Response ReposResponse
 
@@ -42,18 +42,15 @@ getResp userName' = do
         (Right r) -> Right $ r ^. responseBody
         (Left s) -> Left s)
 
-checkInterval :: Int 
-checkInterval = 5 * 1000000
-
-
 checkCIServers :: Config -> Chan CustomEvent -> IO ()
 checkCIServers conf chan = forever $ do
+    let refreshInterval' = (conf ^. defaultSection . refreshInterval) * 1000000
     r' <- Ci.getResp $ conf ^. travis . userName
     case r' of 
         (Left s) -> do  
             writeChan chan $ NetworkError (T.pack s)
-            threadDelay checkInterval
+            threadDelay refreshInterval'
         (Right r) -> do
             let repos' = repos r 
             writeChan chan $ ReposUpdate repos' 
-            threadDelay checkInterval
+            threadDelay refreshInterval'
