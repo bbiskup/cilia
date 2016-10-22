@@ -18,8 +18,11 @@ data Opts =
     Opts { configFileName :: T.Text 
          } deriving (Show) 
 
-optsParser :: Parser Opts
-optsParser = Opts <$> ((T.pack <$> configFileOpt) <|> (pure . T.pack $ "xxx"))
+defaultConfigFileName :: IO String
+defaultConfigFileName = return "xxx"
+
+optsParser :: T.Text -> Parser Opts
+optsParser defaultConfigFileName = Opts <$> ((T.pack <$> configFileOpt) <|> (pure . T.pack $ "xxx"))
     where 
         configFileOpt = strOption 
             (long "config-file"

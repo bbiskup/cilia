@@ -5,6 +5,7 @@ import Prelude
 import Data.Monoid((<>))
 import Control.Monad(void)
 import Control.Concurrent(newChan, forkIO)
+import qualified Data.Text as T
 import Data.Time.Clock(getCurrentTime)
 import Data.Default(def)
 import Brick.Main(customMain)
@@ -12,7 +13,8 @@ import qualified Graphics.Vty as V
 import Options.Applicative
 
 import Opts( Opts(..)
-           , optsParser)
+           , optsParser
+           , defaultConfigFileName)
 import Ui( AppState(..)
          , app)
 import qualified Ci
@@ -53,9 +55,12 @@ doMain (Opts configFileName') = do
     void $ customMain (V.mkVty def) chan app initialState'
 
 main :: IO ()
-main = execParser opts >>= doMain
-    where 
-        opts = info (helper <*> optsParser)
+main = do
+    defaultConfigFileName' <- T.pack <$> defaultConfigFileName
+    let opts = info (helper <*> optsParser defaultConfigFileName')
             (fullDesc
             <> progDesc "Run cilia"
             <> header "cilia - continuous integration monitor")
+    execParser opts >>= doMain
+        
+        
