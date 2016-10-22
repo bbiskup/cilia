@@ -15,6 +15,7 @@ import Ui( AppState(..)
          , conf
          , app)
 import qualified Ci
+import qualified Config
 
 
 {-dummyRepos :: [Repo]
@@ -47,6 +48,8 @@ initialState = do
 
 main :: IO ()
 main = do
+    config <- Config.readConfig "cilia.yml"
+    putStrLn $ "Config: \n" ++ show config
     chan <- newChan
     initialState' <- initialState
     _ <- forkIO $ Ci.checkCIServers (initialState' ^. conf) chan
