@@ -2,12 +2,15 @@
 module Main where
 
 import Prelude
+import Data.Monoid((<>))
+import qualified Data.Text as T
 import Control.Monad(void)
 import Control.Concurrent(newChan, forkIO)
 import Data.Time.Clock(getCurrentTime)
 import Data.Default(def)
 import Brick.Main(customMain)
 import qualified Graphics.Vty as V
+import Options.Applicative
 
 import Ui( AppState(..)
          , app)
@@ -41,10 +44,31 @@ initialState config = do
         }
 
 
-main :: IO ()
-main = do
-    config <- Config.readConfig "cilia.yml"
+data Opts =
+    Opts { configFileName :: T.Text 
+         } deriving (Show) 
+
+optsParser :: Parser Opts
+optsParser = Opts <$>
+    (T.pack <$> strOption 
+            (long "config-file"
+            <> short 'c'
+            <> metavar "FILENAME"
+            <> help "Name of YAML configuration file"))
+
+doMain :: Opts -> IO ()
+doMain (Opts configFileName') = do
+    config <- Config.readConfig configFileName'
     chan <- newChan
     initialState' <- initialState config
     _ <- forkIO $ Ci.checkCIServers config chan
     void $ customMain (V.mkVty def) chan app initialState'
+-- doMain _ = return ()
+
+main :: IO ()
+main = execParser opts >>= doMain
+    where 
+        opts = info (helper <*> optsParser)
+            (fullDesc
+            <> progDesc "Run cilia"
+            <> header "cilia - continuous integration monitor")
