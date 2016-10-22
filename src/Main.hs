@@ -44,7 +44,6 @@ initialState config = do
 main :: IO ()
 main = do
     config <- Config.readConfig "cilia.yml"
-    putStrLn $ "Config: \n" ++ show config
     chan <- newChan
     initialState' <- initialState config
     _ <- forkIO $ Ci.checkCIServers config chan
