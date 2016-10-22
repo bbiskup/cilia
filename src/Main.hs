@@ -51,7 +51,6 @@ doMain (Opts configFileName') = do
     initialState' <- initialState config
     _ <- forkIO $ Ci.checkCIServers config chan
     void $ customMain (V.mkVty def) chan app initialState'
--- doMain _ = return ()
 
 main :: IO ()
 main = execParser opts >>= doMain
