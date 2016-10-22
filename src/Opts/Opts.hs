@@ -32,11 +32,7 @@ defaultConfigFilePath = do
         Nothing -> return noConfigFile
         (Just homeDirStr) -> do
             homeDir' <- P.parseAbsDir homeDirStr
-            let configInHome = P.toFilePath $ homeDir' </> defaultConfigFileName
-            doesExistInHome <- D.doesFileExist configInHome 
-            if doesExistInHome 
-            then return configInHome
-            else return noConfigFile
+            return $ P.toFilePath $ homeDir' </> defaultConfigFileName
 
 optsParser :: IO (Parser Opts)
 optsParser = do
