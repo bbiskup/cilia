@@ -1,4 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE DeriveGeneric #-}
+
 
 module Ci (
     checkCIServers
@@ -8,21 +11,30 @@ import Prelude
 import Control.Exception as E
 import Network.HTTP.Client hiding(responseBody)
 import Control.Monad(forever)
+import GHC.Generics
 import Control.Concurrent(Chan, writeChan, threadDelay)
 import qualified Data.Text.Format as TF
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import qualified Data.ByteString.Char8 as BSC
 import Lens.Micro((^.), (.~), (&))
+import Lens.Micro.TH(makeLenses)
 import Network.Wreq
+import Data.Aeson( FromJSON(..))
 
-import Types(ReposResponse(..))
+import Types(Repo)
 import Ui(CustomEvent(..))
 import Config(Config, travis, userName, defaultSection, refreshInterval)
 
+
+data ReposResponse =
+    ReposResponse { repos :: [Repo]
+    } deriving (Eq, Show, Generic)
+
+instance FromJSON ReposResponse
+makeLenses ''ReposResponse
+
 type Resp = Response ReposResponse
-
-
 
 -- at least Accept header required, see https://docs.travis-ci.com/api#making-requests
 opts :: Options 

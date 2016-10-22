@@ -6,7 +6,6 @@ module Types where
 
 import Prelude
 import Data.Maybe(fromMaybe)
-import GHC.Generics
 import Lens.Micro((^.))
 import Lens.Micro.TH(makeLenses)
 import qualified Data.Text as T
@@ -69,9 +68,3 @@ render repo =
             fmt = "{} ({})" 
 
 
-data ReposResponse =
-    ReposResponse { repos :: [Repo]
-    } deriving (Eq, Show, Generic)
-
-instance FromJSON ReposResponse
-makeLenses ''ReposResponse
