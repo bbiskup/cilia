@@ -104,7 +104,7 @@ repoUI st repos'
             , spacer
             , colorBuildState $ repo ^. lastBuildState
             , spacer
-            , txt .  padTxtRight (15 - T.length lastBuildFinishedTxt') $ lastBuildFinishedTxt'
+            , txt .  padTxtRight (18 - T.length lastBuildFinishedTxt') $ lastBuildFinishedTxt'
             , spacer
             , txt lastBuildDurationTxt
             , spaceFill'
