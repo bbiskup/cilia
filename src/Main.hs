@@ -5,17 +5,14 @@ import Prelude
 import Control.Monad(void)
 import Control.Concurrent(newChan, forkIO)
 import Data.Time.Clock(getCurrentTime)
-import Lens.Micro((^.))
 import Data.Default(def)
 import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 
-import Types(Conf(..))
 import Ui( AppState(..)
-         , conf
          , app)
 import qualified Ci
-import qualified Config
+import Config(Config, readConfig)
 
 
 {-dummyRepos :: [Repo]
@@ -31,14 +28,12 @@ dummyRepos = [
              }
         ]
 -}
-staticConf :: Conf
-staticConf = Conf { _travisUser = "bbiskup"}
 
-initialState :: IO Ui.AppState
-initialState = do 
+initialState :: Config -> IO Ui.AppState
+initialState config = do 
     timestamp <- getCurrentTime
     return Ui.AppState 
-        { _conf = staticConf
+        { _conf = config
         , _stLastVtyEvent = Nothing
         , _repos = []
         , _timestamp = timestamp
@@ -51,6 +46,6 @@ main = do
     config <- Config.readConfig "cilia.yml"
     putStrLn $ "Config: \n" ++ show config
     chan <- newChan
-    initialState' <- initialState
-    _ <- forkIO $ Ci.checkCIServers (initialState' ^. conf) chan
+    initialState' <- initialState config
+    _ <- forkIO $ Ci.checkCIServers config chan
     void $ customMain (V.mkVty def) chan app initialState'

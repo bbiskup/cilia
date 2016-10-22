@@ -19,12 +19,6 @@ import Data.Aeson( FromJSON(..)
                  , (.:?)
                  , (.:))
 
-data Conf =
-    Conf { _travisUser :: T.Text 
-         } deriving (Eq, Show)
-
-makeLenses ''Conf
-
 data BuildState =
       Passed
     | Failed

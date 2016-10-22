@@ -1,5 +1,5 @@
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Config where
 
@@ -9,24 +9,34 @@ import Data.Yaml( FromJSON(..)
                 , (.:)
                 , decodeFileEither)
 import qualified Data.Yaml as Y
-import qualified GHC.Generics as G
+import Lens.Micro.TH(makeLenses)
 
 data DefaultSection = 
-    DefaultSection { refreshInterval :: Int
-                  }deriving(Eq, Show, G.Generic)
+    DefaultSection { _refreshInterval :: Int
+                   }deriving(Eq, Show)
 
-instance FromJSON DefaultSection
+instance FromJSON DefaultSection where
+    parseJSON (Y.Object o) = DefaultSection <$>
+        o .: "refreshInterval"
+    parseJSON _ = error "Expected travis section"
+
+makeLenses ''DefaultSection
 
 
 data TravisSection = 
-    TravisSection { userName :: T.Text
-                  }deriving(Eq, Show, G.Generic)
+    TravisSection { _userName :: T.Text
+                  }deriving(Eq, Show)
 
-instance FromJSON TravisSection
+instance FromJSON TravisSection where
+    parseJSON (Y.Object o) = TravisSection <$>
+        o .: "userName"
+    parseJSON _ = error "Expected travis section"
+
+makeLenses ''TravisSection
 
 data Config = 
-    Config { defaultSection :: DefaultSection
-           , travis :: TravisSection
+    Config { _defaultSection :: DefaultSection
+           , _travis :: TravisSection
            }deriving(Eq, Show)
 
 instance FromJSON Config where
@@ -34,6 +44,8 @@ instance FromJSON Config where
         o .: "default" <*>
         o .: "travis"
     parseJSON _ = fail "Expected configuration object"
+
+makeLenses ''Config
 
 readConfig :: T.Text -> IO Config
 readConfig configFileName =

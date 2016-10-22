@@ -39,14 +39,13 @@ import Types( Repo
             , lastBuildFinishedAt
             , lastBuildDuration
             , active
-            , BuildState(..)
-            , Conf
-            , travisUser)
+            , BuildState(..))
+import Config(Config, defaultSection, travis, userName)
 
 type ErrorMsg = T.Text
 
 data AppState = 
-    AppState { _conf :: Conf
+    AppState { _conf :: Config
              , _stLastVtyEvent :: Maybe V.Event 
              , _repos :: [Repo]
              , _timestamp :: UTCTime
@@ -84,7 +83,7 @@ headerUI st = BWC.hCenter  headerParts
     where
         headerTxt :: T.Text
         headerTxt = T.concat [ "Travis projects for "
-                             , st ^. conf . travisUser]
+                             , st ^. conf . travis . userName]
         headerParts = withAttr "status.normal" $ hBox 
             [ spaceFill'
             , txt headerTxt 

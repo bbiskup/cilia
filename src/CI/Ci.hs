@@ -16,8 +16,9 @@ import qualified Data.ByteString.Char8 as BSC
 import Lens.Micro((^.), (.~), (&))
 import Network.Wreq
 
-import Types(Conf, ReposResponse(..), travisUser)
+import Types(ReposResponse(..))
 import Ui(CustomEvent(..))
+import Config(Config, travis, userName)
 
 type Resp = Response ReposResponse
 
@@ -34,8 +35,8 @@ handler (StatusCodeException s _ _ ) = return $ Left $ BSC.unpack (s ^. statusMe
 handler e = return $ Left (show e)
 
 getResp :: T.Text -> IO (Either String ReposResponse)
-getResp userName = do
-    let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName)
+getResp userName' = do
+    let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName')
     eitherR <- (Right <$> (asJSON =<< getWith opts reposUrl)) `E.catch` handler :: IO (Either String Resp)
     return (case eitherR of
         (Right r) -> Right $ r ^. responseBody
@@ -45,9 +46,9 @@ checkInterval :: Int
 checkInterval = 5 * 1000000
 
 
-checkCIServers :: Conf -> Chan CustomEvent -> IO ()
+checkCIServers :: Config -> Chan CustomEvent -> IO ()
 checkCIServers conf chan = forever $ do
-    r' <- Ci.getResp $ conf ^. travisUser
+    r' <- Ci.getResp $ conf ^. travis . userName
     case r' of 
         (Left s) -> do  
             writeChan chan $ NetworkError (T.pack s)

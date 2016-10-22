@@ -5,12 +5,11 @@
 ## UI
  * scrolling (list)
  * apply timezone when displaying timestamps
+ * show proper error when incorrect username
 
 ## General
-* read config?
-  - accounts
+* read config
   - update frequency?
 * accept command line parameters?
-* username from config (Main.hs)
 * introduce lifecycle states to indicate initial loading of data
 
