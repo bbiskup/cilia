@@ -1,5 +1,6 @@
 module Opts where
 
+import Prelude
 import Data.Monoid((<>))
 import qualified Data.Text as T
 import Options.Applicative
@@ -8,16 +9,18 @@ import Options.Applicative
     , long
     , short
     , metavar
-    , help)
+    , help
+    , (<|>))
 
 data Opts =
     Opts { configFileName :: T.Text 
          } deriving (Show) 
 
 optsParser :: Parser Opts
-optsParser = Opts <$>
-    (T.pack <$> strOption 
+optsParser = Opts <$> (T.pack <$> (configFileOpt <|> pure "xxx"))
+    where 
+        configFileOpt = strOption 
             (long "config-file"
             <> short 'c'
             <> metavar "FILENAME"
-            <> help "Name of YAML configuration file"))
+            <> help "Name of YAML configuration file")

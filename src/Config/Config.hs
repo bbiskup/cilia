@@ -4,8 +4,10 @@
 module Config where
 
 import Prelude 
+-- import System.Environment(getEnv)
 import Data.Maybe(fromMaybe)
 import qualified Data.Text as T
+-- import qualified Path as P
 import Data.Yaml( FromJSON(..)
                 , (.:)
                 , (.:?)
@@ -49,6 +51,14 @@ instance FromJSON Config where
 
 makeLenses ''Config
 
+{-defaultConfigFileName :: IO P.Path
+defaultConfigFileName = 
+
+
+findConfigPath :: IO P.Path
+    homeDir < 
+    where homeDir = parseAbsFile <$> lookupEnv "HOME"
+-}
 readConfig :: T.Text -> IO Config
 readConfig configFileName =
     either (error . show) id <$>

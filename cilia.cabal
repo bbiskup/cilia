@@ -64,6 +64,7 @@ executable cilia
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.8 && <4.9
                      , optparse-applicative == 0.13.0.0
+                     , path == 0.5.9
                      , text == 1.2.2.0
                      , text-format == 0.3.1.1
                      , containers == 0.5.6.2
