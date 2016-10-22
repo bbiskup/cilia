@@ -4,10 +4,8 @@
 module Config where
 
 import Prelude 
--- import System.Environment(getEnv)
 import Data.Maybe(fromMaybe)
 import qualified Data.Text as T
--- import qualified Path as P
 import Data.Yaml( FromJSON(..)
                 , (.:)
                 , (.:?)

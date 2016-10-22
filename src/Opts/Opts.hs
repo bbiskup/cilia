@@ -3,6 +3,8 @@ module Opts where
 import Prelude
 import Data.Monoid((<>))
 import qualified Data.Text as T
+import System.Environment(getEnv)
+import qualified Path as P
 import Options.Applicative
     ( Parser
     , strOption
@@ -17,7 +19,7 @@ data Opts =
          } deriving (Show) 
 
 optsParser :: Parser Opts
-optsParser = Opts <$> (T.pack <$> (configFileOpt <|> pure "xxx"))
+optsParser = Opts <$> ((T.pack <$> configFileOpt) <|> (pure . T.pack $ "xxx"))
     where 
         configFileOpt = strOption 
             (long "config-file"
