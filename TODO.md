@@ -17,3 +17,6 @@
 # Travis
 * show build duration while building
 * detect status "building" (started not null, finished null)
+
+# Build & deploymnent
+* check out https://github.com/dkubb/haskell-builder
