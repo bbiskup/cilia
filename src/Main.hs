@@ -3,7 +3,6 @@ module Main where
 
 import Prelude
 import Data.Monoid((<>))
-import qualified Data.Text as T
 import Control.Monad(void)
 import Control.Concurrent(newChan, forkIO)
 import Data.Time.Clock(getCurrentTime)
@@ -12,6 +11,8 @@ import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 import Options.Applicative
 
+import Opts( Opts(..)
+           , optsParser)
 import Ui( AppState(..)
          , app)
 import qualified Ci
@@ -42,19 +43,6 @@ initialState config = do
         , _timestamp = timestamp
         , _errMsg  = Nothing
         }
-
-
-data Opts =
-    Opts { configFileName :: T.Text 
-         } deriving (Show) 
-
-optsParser :: Parser Opts
-optsParser = Opts <$>
-    (T.pack <$> strOption 
-            (long "config-file"
-            <> short 'c'
-            <> metavar "FILENAME"
-            <> help "Name of YAML configuration file"))
 
 doMain :: Opts -> IO ()
 doMain (Opts configFileName') = do

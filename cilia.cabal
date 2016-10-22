@@ -90,6 +90,7 @@ executable cilia
                      , src/Types
                      , src/Ui
                      , src/CI 
+                     , src/Opts
                      , src/Config
 
   -- Base language which the package is written in.
