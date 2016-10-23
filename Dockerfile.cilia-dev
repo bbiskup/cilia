@@ -5,10 +5,7 @@ RUN useradd -m -s /bin/bash cilia
 USER cilia
 WORKDIR /home/cilia
 
-ADD cilia.cabal cilia.cabal
-RUN cabal update && \
-    cabal install --only-dependencies -j4
-
+RUN cabal update
 
 ADD LICENSE LICENSE
 ADD ./src src
