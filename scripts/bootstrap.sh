@@ -1,4 +1,5 @@
 #!/bin/bash -e                                                                                                                                                        
+
                                                                                  
  # Build Docker container for development                                       
                                                                                 
