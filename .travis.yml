@@ -12,7 +12,7 @@ cache:
     - /home/travis/build/bbiskup/cilia/.cabal
     - /home/travis/build/bbiskup/cilia/.cabal-sandbox
     - /home/travis/build/bbiskup/cilia/.stack
-    - /home/travis/build/bbiskup/cilia/.travis-docker
+    - /home/travis/.travis-docker
 
 before_script:
   - pwd
