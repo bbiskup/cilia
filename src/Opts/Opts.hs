@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Opts where
 
 import Prelude
@@ -8,7 +6,6 @@ import qualified Data.Text as T
 import System.Environment as E
 import qualified Path as P
 import Path((</>))
-import qualified System.Directory as D
 import Options.Applicative
     ( Parser
     , strOption
