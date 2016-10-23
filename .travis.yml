@@ -15,6 +15,9 @@ cache:
 
 before_script:
   - pwd
+  - du -sh .ghc
+  - du -sh .cabal
+  - du -sh .cabal-sandbox
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - ./scripts/bootstrap.sh
   - make build
