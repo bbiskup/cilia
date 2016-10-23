@@ -1,0 +1,22 @@
+FROM haskell:7.10.3
+MAINTAINER bbiskup@gmx.de
+
+RUN useradd -m -s /bin/bash cilia
+USER cilia
+WORKDIR /home/cilia
+
+ADD cilia.cabal cilia.cabal
+RUN cabal update && \
+    cabal install --only-dependencies -j4
+
+
+ADD LICENSE LICENSE
+ADD ./src src
+
+RUN cabal install
+
+ENV PATH=$PATH:/home/cilia/dist/build/cilia
+
+# ADD /usr/lib/x86_64-linux-gnu/libffi.so.6 libffi.so.6
+
+ENTRYPOINT  ["/bin/bash"]
