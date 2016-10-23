@@ -1,6 +1,3 @@
-run-cilia2:
-	docker-compose run --rm  cilia2
-
 # Uses dockerize Python package (https://github.com/larsks/dockerize)
 # additional files required because:
 # - without libresolv: "no such protocl: tcp" error
