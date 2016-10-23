@@ -12,14 +12,17 @@ cache:
     - /home/travis/build/bbiskup/cilia/.cabal
     - /home/travis/build/bbiskup/cilia/.cabal-sandbox
     - /home/travis/build/bbiskup/cilia/.stack
+    - /home/travis/build/bbiskup/cilia/.travis-docker
 
 before_script:
   - pwd
   - du -sh .ghc
   - du -sh .cabal
   - du -sh .cabal-sandbox
+  - if [[ -e ~/.travis-docker/dev-image.tar ]]; then docker load -i ~/.travis-docker/dev-image.tar; fi
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - ./scripts/bootstrap.sh
+  - mkdir -p ~/.travis-docker; docker save cilia_dev_1 > ~/.travis-docker/dev-image.tar
   - make build
   - make create-minimal-docker-container
   - make test
