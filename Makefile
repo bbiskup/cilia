@@ -18,8 +18,10 @@ bash:
 # - without ssl certs: handshake failure 
 
 build:
-	./scripts/docker-cmd.sh "cabal update && cabal install --only-dependencies && cabal build"
+	./scripts/docker-cmd.sh "cabal update && cabal configure --enable-test cabal install --only-dependencies --enable-test && cabal build"
 
+test:
+	./scripts/docker-cmd.sh "cabal test"	
 create-minimal-docker-container:
 	./scripts/docker-cmd.sh dockerize --tag cilia-minimal \
 		--verbose --debug \

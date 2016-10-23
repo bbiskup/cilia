@@ -19,6 +19,7 @@ before_script:
   - ./scripts/bootstrap.sh
   - make build
   - make create-minimal-docker-container
+  - make test
   - make docker-push
 
 script:
