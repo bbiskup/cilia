@@ -1,5 +1,6 @@
-/.cabal-sandbox
-/.cabal
-/.git
-/dist
-/tmp
+.cabal-sandbox
+.cabal
+.git
+dist
+tmp
+OLD
