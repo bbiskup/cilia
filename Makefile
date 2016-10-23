@@ -16,11 +16,15 @@ bash:
 # additional files required because:
 # - without libresolv: "no such protocl: tcp" error
 # - without ssl certs: handshake failure 
+
+build:
+	./scripts/docker-cmd.sh "cabal install --only-dependencies ; cabal build"
+
 create-minimal-docker-container:
-	scripts/docker-cmd.sh whoami
-	scripts/docker-cmd.sh ps -ef|grep -i docker
-	scripts/docker-cmd.sh docker ps
-	scripts/docker-cmd.sh dockerize --tag cilia-minimal \
+	./scripts/docker-cmd.sh whoami
+	./scripts/docker-cmd.sh ps -ef
+	./scripts/docker-cmd.sh docker ps
+	./scripts/docker-cmd.sh dockerize --tag cilia-minimal \
 		-a /lib/terminfo /lib/ \
 		-a /etc/protocols /etc/ \
 		-a /etc/ssl/certs /etc/ssl/ \

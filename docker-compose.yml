@@ -6,7 +6,7 @@ services:
             dockerfile: Dockerfile.cilia-dev
         network_mode: host
         volumes:
-            # - ./data:/data
+            - ./src:/home/cilia/src
             - .bash_history:/home/cilia/.bash_history
             - ./.cabal:/home/cilia/.cabal
             - ./cilia.cabal:/home/cilia/cilia.cabal
