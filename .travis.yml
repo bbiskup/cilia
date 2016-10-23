@@ -10,6 +10,7 @@ cache:
   directories:
     - /home/travis/build/bbiskup/cilia/.ghc
     - /home/travis/build/bbiskup/cilia/.cabal
+    - /home/travis/build/bbiskup/cilia/.cabal-sandbox
     - /home/travis/build/bbiskup/cilia/.stack
 
 before_script:
