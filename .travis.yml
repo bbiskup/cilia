@@ -8,9 +8,9 @@ dist: trusty
 
 cache:
   directories:
-    - $HOME/.ghc
-    - $HOME/.cabal
-    - $HOME/.stack
+    - /home/travis/build/bbiskup/cilia/.ghc
+    - /home/travis/build/bbiskup/cilia/.cabal
+    - /home/travis/build/bbiskup/cilia/.stack
 
 before_script:
   - pwd
