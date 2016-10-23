@@ -8,7 +8,6 @@ RUN apt-get -yy update && \
 RUN pip install dockerize==0.2.2
 
 RUN useradd -m -s /bin/bash cilia
-USER cilia
 WORKDIR /home/cilia
 
 RUN cabal update
