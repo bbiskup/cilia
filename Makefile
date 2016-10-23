@@ -1,5 +1,5 @@
-REPO_BUILD_TAG=bbiskup/cilia-minimal:$(TRAVIS_BRANCH)-build-$(TRAVIS_BUILD_NUMBER) 
-REPO_LATEST_TAG=bbiskup/cilia-minimal:latest
+REPO_BUILD_TAG=bbiskup/cilia:$(TRAVIS_BRANCH)-build-$(TRAVIS_BUILD_NUMBER) 
+REPO_LATEST_TAG=bbiskup/cilia:latest
 
 bash:
 	./scripts/docker-cmd.sh bash
@@ -21,15 +21,13 @@ build:
 	./scripts/docker-cmd.sh "cabal update && cabal install --only-dependencies && cabal build"
 
 create-minimal-docker-container:
-	./scripts/docker-cmd.sh whoami
-	./scripts/docker-cmd.sh ps -ef
-	./scripts/docker-cmd.sh docker ps
 	./scripts/docker-cmd.sh dockerize --tag cilia-minimal \
+		--verbose --debug \
 		-a /lib/terminfo /lib/ \
 		-a /etc/protocols /etc/ \
 		-a /etc/ssl/certs /etc/ssl/ \
 		-a /lib/x86_64-linux-gnu/libresolv-2.19.so /lib/x86_64-linux-gnu/libresolv.so.2 \
-		-a $PWD/dist/build/cilia/cilia  /bin/cilia /bin/cilia
+		-a /home/cilia/dist/build/cilia/cilia  /bin/ /bin/cilia
 
 
 run-minimal-docker-container:
