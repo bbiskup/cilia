@@ -18,7 +18,7 @@ bash:
 # - without ssl certs: handshake failure 
 
 build:
-	./scripts/docker-cmd.sh "cabal update && cabal configure --enable-test && cabal install --only-dependencies --enable-test && cabal build"
+	./scripts/docker-cmd.sh "cabal sandbox init ; cabal update &&  cabal install --only-dependencies --enable-test && cabal configure --enable-test && cabal build"
 
 test:
 	./scripts/docker-cmd.sh "cabal test"	
