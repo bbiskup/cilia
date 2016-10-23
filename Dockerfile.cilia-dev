@@ -1,6 +1,12 @@
 FROM haskell:7.10.3
 MAINTAINER bbiskup@gmx.de
 
+RUN apt-get -yy update && \
+    apt-get install -yy python python-pip rsync libltdl7 && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install dockerize==0.2.2
+
 RUN useradd -m -s /bin/bash cilia
 USER cilia
 WORKDIR /home/cilia
@@ -14,6 +20,5 @@ ADD ./src src
 
 ENV PATH=$PATH:/home/cilia/dist/build/cilia
 
-# ADD /usr/lib/x86_64-linux-gnu/libffi.so.6 libffi.so.6
 
 ENTRYPOINT  ["/bin/bash"]
