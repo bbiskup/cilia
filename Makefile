@@ -17,6 +17,9 @@ bash:
 # - without libresolv: "no such protocl: tcp" error
 # - without ssl certs: handshake failure 
 create-minimal-docker-container:
+	scripts/docker-cmd.sh whoami
+	scripts/docker-cmd.sh ps -ef|grep -i docker
+	scripts/docker-cmd.sh docker ps
 	scripts/docker-cmd.sh dockerize --tag cilia-minimal \
 		-a /lib/terminfo /lib/ \
 		-a /etc/protocols /etc/ \
