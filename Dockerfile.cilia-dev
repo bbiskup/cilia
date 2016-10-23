@@ -21,4 +21,4 @@ ADD ./src src
 ENV PATH=$PATH:/home/cilia/dist/build/cilia
 
 
-ENTRYPOINT  ["/bin/bash"]
+ENTRYPOINT  ["/bin/bash", "-c"]
