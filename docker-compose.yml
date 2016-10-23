@@ -1,6 +1,6 @@
 version: '2'
 services:
-    cilia-dev:
+    dev:
         build:
             context: .
             dockerfile: Dockerfile.cilia-dev

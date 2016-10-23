@@ -1,5 +1,5 @@
 bash:
-	docker-compose  run --rm cilia-dev
+	docker-compose  run --rm dev
 
 # Uses dockerize Python package (https://github.com/larsks/dockerize)
 # additional files required because:
