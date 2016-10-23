@@ -18,7 +18,7 @@ bash:
 # - without ssl certs: handshake failure 
 
 build:
-	./scripts/docker-cmd.sh "cabal install --only-dependencies ; cabal build"
+	./scripts/docker-cmd.sh "cabal update && cabal install --only-dependencies && cabal build"
 
 create-minimal-docker-container:
 	./scripts/docker-cmd.sh whoami
