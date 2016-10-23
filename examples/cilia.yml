@@ -1,0 +1,4 @@
+default:
+  refreshInterval: 5 
+travis:
+  userName: bbiskup
