@@ -7,4 +7,10 @@ services:
         network_mode: host
         volumes:
             # - ./data:/data
+            - .bash_history:/home/cilia/.bash_history
+            - ./.cabal:/home/cilia/.cabal
+            - ./cilia.cabal:/home/cilia/cilia.cabal
+            - ./cabal.sandbox.config:/home/cilia/cabal.sandbox.config
+            - ./.cabal-sandbox:/home/cilia/.cabal-sandbox
+            - ./dist:/home/cilia/dist
             - ./examples/cilia.yml:/home/cilia/cilia.yml
