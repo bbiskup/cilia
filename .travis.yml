@@ -1,4 +1,6 @@
-language: haskell
+# Use dummy language to suppress Haskell-specific, automatic build steps
+# (will be done inside dev container)
+language: cpp
 sudo: required
 services:
   - docker
