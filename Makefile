@@ -16,7 +16,7 @@ test:
 # - without libresolv: "no such protocl: tcp" error
 # - without ssl certs: handshake failure 
 create-minimal-docker-container:
-	strip /home/cilia/dist/build/cilia/cilia -o /home/cilia/dist/build/cilia/cilia-stripped
+	./scripts/docker-cmd.sh strip /home/cilia/dist/build/cilia/cilia -o /home/cilia/dist/build/cilia/cilia-stripped
 	./scripts/docker-cmd.sh dockerize --tag cilia-minimal \
 		-a /lib/terminfo /lib/ \
 		-a /etc/protocols /etc/ \
