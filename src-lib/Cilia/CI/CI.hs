@@ -3,7 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 
-module Cilia.Ci (
+module Cilia.CI.CI (
     checkCIServers
 )where
 
@@ -57,7 +57,7 @@ getResp userName' = do
 checkCIServers :: Config -> Chan CustomEvent -> IO ()
 checkCIServers conf chan = forever $ do
     let refreshInterval' = (conf ^. defaultSection . refreshInterval) * 1000000
-    r' <- Cilia.Ci.getResp $ conf ^. travis . userName
+    r' <- getResp $ conf ^. travis . userName
     case r' of 
         (Left s) -> do  
             writeChan chan $ NetworkError (T.pack s)

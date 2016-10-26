@@ -15,7 +15,7 @@ import Cilia.Opts( Opts(..)
                  , optsParser)
 import Cilia.Ui( AppState(..)
                , app)
-import qualified Cilia.Ci
+import qualified Cilia.CI.CI as CI
 import Cilia.Config(Config, readConfig)
 
 
@@ -49,7 +49,7 @@ doMain (Opts configFileName') = do
     config <- Cilia.Config.readConfig configFileName'
     chan <- newChan
     initialState' <- initialState config
-    _ <- forkIO $ Cilia.Ci.checkCIServers config chan
+    _ <- forkIO $ CI.checkCIServers config chan
     void $ customMain (V.mkVty def) chan app initialState'
 
 libMain :: IO ()

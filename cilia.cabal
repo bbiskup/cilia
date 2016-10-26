@@ -78,7 +78,7 @@ library
   
   exposed-modules: Cilia.LibMain
                  , Cilia.Config
-                 , Cilia.Ci
+                 , Cilia.CI.CI
                  , Cilia.Opts
                  , Cilia.Types
                  , Cilia.Ui
