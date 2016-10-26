@@ -50,11 +50,6 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs: src-lib
-                , src-lib/Types
-                , src-lib/Ui
-                , src-lib/CI 
-                , src-lib/Opts
-                , src-lib/Config
 
   build-depends:       base >=4.8 && <4.9
                      , optparse-applicative == 0.13.0.0
@@ -81,15 +76,16 @@ library
                      , brick == 0.10
                      , hlint == 1.9.37
   
-  exposed-modules: LibMain
-                 , Config
-                 , Ci
-                 , Opts
-                 , Types
-                 , Ui
+  exposed-modules: Cilia.LibMain
+                 , Cilia.Config
+                 , Cilia.Ci
+                 , Cilia.Opts
+                 , Cilia.Types
+                 , Cilia.Ui
 
   ghc-options:         -threaded -Wall  -fwarn-tabs -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -fwarn-unused-do-bind -fwarn-implicit-prelude
-
+  default-language:    Haskell2010
+  
 executable cilia
   -- .hs or .lhs file containing the Main module.
   main-is:             Main.hs

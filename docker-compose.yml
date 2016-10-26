@@ -15,7 +15,7 @@ services:
             # - ./cabal.sandbox.config:/home/cilia/cabal.sandbox.config
             - ./.cabal-sandbox:/home/cilia/.cabal-sandbox
             - ./dist:/home/cilia/dist
-            - ./examples/cilia.yml:/home/cilia/cilia.yml
+            - ./examples/cilia.yml:/root/cilia.yml
 
             # Access to Docker daemon on host
             - /usr/bin/docker:/usr/bin/docker

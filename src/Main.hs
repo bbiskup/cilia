@@ -1,7 +1,7 @@
 module Main where
 
 import Prelude
-import LibMain(libMain)
+import Cilia.LibMain(libMain)
 
 main :: IO ()
 main = libMain

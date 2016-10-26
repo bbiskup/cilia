@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Ui where
+module Cilia.Ui where
 
 import Prelude
 import qualified Data.Text as T
@@ -33,14 +33,14 @@ import Brick.Main (
     , continue
     )
 import qualified Brick.Widgets.Center as BWC 
-import Types( Repo
-            ,  slug
-            , lastBuildState
-            , lastBuildFinishedAt
-            , lastBuildDuration
-            , active
-            , BuildState(..))
-import Config(Config, travis, userName)
+import Cilia.Types( Repo
+                  ,  slug
+                  , lastBuildState
+                  , lastBuildFinishedAt
+                  , lastBuildDuration
+                  , active
+                  , BuildState(..))
+import Cilia.Config(Config, travis, userName)
 
 type ErrorMsg = T.Text
 

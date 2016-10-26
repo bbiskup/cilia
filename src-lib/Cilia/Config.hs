@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Config where
+module Cilia.Config where
 
 import Prelude 
 import Data.Maybe(fromMaybe)

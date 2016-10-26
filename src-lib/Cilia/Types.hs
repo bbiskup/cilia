@@ -2,7 +2,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Types where
+module Cilia.Types where
 
 import Prelude
 import Data.Maybe(fromMaybe)

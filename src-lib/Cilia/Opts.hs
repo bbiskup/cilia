@@ -1,4 +1,4 @@
-module Opts where
+module Cilia.Opts where
 
 import Prelude
 import Data.Monoid((<>))

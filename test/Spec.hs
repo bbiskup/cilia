@@ -1,6 +1,6 @@
 import Test.Hspec
 
-import Types(BuildState(Passed))
+import Cilia.Types(BuildState(Passed))
 
 main :: IO()
 main = hspec $ do

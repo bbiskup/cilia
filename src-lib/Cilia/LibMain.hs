@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module LibMain(libMain) where
+module Cilia.LibMain(libMain) where
 
 import Prelude
 import Data.Monoid((<>))
@@ -11,12 +11,12 @@ import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 import Options.Applicative
 
-import Opts( Opts(..)
-           , optsParser)
-import Ui( AppState(..)
-         , app)
-import qualified Ci
-import Config(Config, readConfig)
+import Cilia.Opts( Opts(..)
+                 , optsParser)
+import Cilia.Ui( AppState(..)
+               , app)
+import qualified Cilia.Ci
+import Cilia.Config(Config, readConfig)
 
 
 {-dummyRepos :: [Repo]
@@ -33,10 +33,10 @@ dummyRepos = [
         ]
 -}
 
-initialState :: Config -> IO Ui.AppState
+initialState :: Config -> IO Cilia.Ui.AppState
 initialState config = do 
     timestamp <- getCurrentTime
-    return Ui.AppState 
+    return Cilia.Ui.AppState 
         { _conf = config
         , _stLastVtyEvent = Nothing
         , _repos = []
@@ -46,10 +46,10 @@ initialState config = do
 
 doMain :: Opts -> IO ()
 doMain (Opts configFileName') = do
-    config <- Config.readConfig configFileName'
+    config <- Cilia.Config.readConfig configFileName'
     chan <- newChan
     initialState' <- initialState config
-    _ <- forkIO $ Ci.checkCIServers config chan
+    _ <- forkIO $ Cilia.Ci.checkCIServers config chan
     void $ customMain (V.mkVty def) chan app initialState'
 
 libMain :: IO ()

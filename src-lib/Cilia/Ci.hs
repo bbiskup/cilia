@@ -3,7 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 
-module Ci (
+module Cilia.Ci (
     checkCIServers
 )where
 
@@ -22,9 +22,9 @@ import Lens.Micro.TH(makeLenses)
 import Network.Wreq
 import Data.Aeson( FromJSON(..))
 
-import Types(Repo)
-import Ui(CustomEvent(..))
-import Config(Config, travis, userName, defaultSection, refreshInterval)
+import Cilia.Types(Repo)
+import Cilia.Ui(CustomEvent(..))
+import Cilia.Config(Config, travis, userName, defaultSection, refreshInterval)
 
 
 data ReposResponse =
@@ -57,7 +57,7 @@ getResp userName' = do
 checkCIServers :: Config -> Chan CustomEvent -> IO ()
 checkCIServers conf chan = forever $ do
     let refreshInterval' = (conf ^. defaultSection . refreshInterval) * 1000000
-    r' <- Ci.getResp $ conf ^. travis . userName
+    r' <- Cilia.Ci.getResp $ conf ^. travis . userName
     case r' of 
         (Left s) -> do  
             writeChan chan $ NetworkError (T.pack s)
