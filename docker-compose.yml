@@ -7,6 +7,7 @@ services:
         network_mode: host
         volumes:
             - ./src:/home/cilia/src
+            - ./src-lib:/home/cilia/src-lib
             - ./test:/home/cilia/test
             - .bash_history:/home/cilia/.bash_history
             - ./.cabal:/home/cilia/.cabal
