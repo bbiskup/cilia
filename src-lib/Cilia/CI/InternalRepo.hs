@@ -26,6 +26,8 @@ import Lens.Micro.TH(makeLenses)
 data BuildState =
       Passed
     | Failed
+    | Error
+    | Running
     | Unknown
     deriving(Ord, Eq, Show)
 

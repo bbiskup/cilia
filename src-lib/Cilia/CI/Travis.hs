@@ -6,6 +6,7 @@ module Cilia.CI.Travis(getInternalRepos)
 where
 
 import Prelude
+import qualified Data.Maybe as DM
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import qualified Data.ByteString.Char8 as BSC
@@ -68,26 +69,31 @@ instance FromJSON Repo where
             Nothing -> Nothing
             (Just ts) -> TI.parseISO8601 ts
 
+mapBuildState :: BuildState -> IR.BuildState
+mapBuildState Passed = IR.Passed
+mapBuildState Failed = IR.Failed
+mapBuildState Unknown = IR.Unknown
+-- TODO: get complete list of possible states
+
+getLastBuildState :: Repo -> IR.BuildState
+getLastBuildState tr =
+    case tr ^. lastBuildState of
+        Just s -> mapBuildState s 
+        Nothing -> if DM.isNothing (tr ^. lastBuildFinishedAt) 
+                   then IR.Running
+                   else IR.Unknown
+
 instance IR.ToInternalRepo Repo where
     toInternalRepo travisRepo = 
       InternalRepo
           { IR._slug = travisRepo ^. slug
           , IR._description =  travisRepo ^. description
-          , IR._lastBuildState = lastBuildState'
+          , IR._lastBuildState = Just $ getLastBuildState travisRepo
           , IR._lastBuildNumber = travisRepo ^. lastBuildNumber
           , IR._lastBuildDuration = travisRepo ^. lastBuildDuration
           , IR._lastBuildFinishedAt = travisRepo ^. lastBuildFinishedAt
           , IR._active = travisRepo ^.  active
           }
-          where lastBuildState' = Just IR.Unknown
-
-{-        where lastBuildState'
-          | case lastTravisBuildState of
-              (Just s) = 
-
-            where lastTravisBuildState = travisRepo ^. lastBuildState
-
--}
 
 data ReposResponse =
     ReposResponse { repos :: [Repo]
