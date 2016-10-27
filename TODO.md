@@ -20,3 +20,10 @@
 
 # Build & deploymnent
 * check out https://github.com/dkubb/haskell-builder
+
+
+# Misc 
+* remove obsolete Types.hs
+* Retrieve reference data from Travis with correct accept header
+* blink when in state running (Graphics.Vty.Attributes.blink?)
+* correct count of failed/errorred test cases: don't count 'running'
