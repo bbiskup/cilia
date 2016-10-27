@@ -188,9 +188,10 @@ theMap :: AttrMap
 theMap = attrMap V.defAttr
     [ ("build.passed",      V.black `on` V.green)
     , ("build.failed",      V.white `on` V.red)
-    , ("status.error",     V.red `on` V.white)
-    , ("status.running",     V.yellow `on` V.white)
+    , ("build.error",     V.red `on` V.white)
+    , ("build.running",     V.black `on` V.white)
     , ("build.unknown",     V.black `on` V.white)
+    
     , ("status.normal",     V.blue `on` V.white)
     ]
 

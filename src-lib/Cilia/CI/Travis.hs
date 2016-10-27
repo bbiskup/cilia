@@ -30,6 +30,7 @@ import Cilia.CI.InternalRepo(InternalRepo(..))
 
 data BuildState =
       Passed
+    | Started
     | Failed
     | Unknown
     deriving(Ord, Eq, Show)
@@ -37,6 +38,7 @@ data BuildState =
 instance FromJSON BuildState where
     parseJSON "failed" = return Failed
     parseJSON "passed" = return Passed
+    parseJSON "started" = return Started
     parseJSON _ = return Unknown
 
 type BuildNumber = T.Text 
@@ -72,6 +74,7 @@ instance FromJSON Repo where
 mapBuildState :: BuildState -> IR.BuildState
 mapBuildState Passed = IR.Passed
 mapBuildState Failed = IR.Failed
+mapBuildState Started = IR.Running
 mapBuildState Unknown = IR.Unknown
 -- TODO: get complete list of possible states
 
