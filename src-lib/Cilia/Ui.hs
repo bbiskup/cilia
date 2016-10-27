@@ -33,13 +33,15 @@ import Brick.Main (
     , continue
     )
 import qualified Brick.Widgets.Center as BWC 
-import Cilia.Types( Repo
-                  ,  slug
-                  , lastBuildState
-                  , lastBuildFinishedAt
-                  , lastBuildDuration
-                  , active
-                  , BuildState(..))
+import Cilia.CI.InternalRepo(
+    InternalRepo
+  , BuildState(..)
+  , slug
+  , lastBuildState
+  , lastBuildFinishedAt
+  , lastBuildDuration
+  , active
+  , BuildState(..))
 import Cilia.Config(Config, travis, userName)
 
 type ErrorMsg = T.Text
@@ -47,7 +49,7 @@ type ErrorMsg = T.Text
 data AppState = 
     AppState { _conf :: Config
              , _stLastVtyEvent :: Maybe V.Event 
-             , _repos :: [Repo]
+             , _repos :: [InternalRepo]
              , _timestamp :: UTCTime
              , _errMsg :: Maybe ErrorMsg
 }
@@ -91,7 +93,7 @@ headerUI st = BWC.hCenter  headerParts
             ]
             where spaceFill' = stretchHFill ' '
 
-repoUI :: AppState -> [Repo]-> BT.Widget ()
+repoUI :: AppState -> [InternalRepo]-> BT.Widget ()
 repoUI st repos' 
     | not (null repos')  = vBox . fmap renderRepo . sortBy cmpLastBuildFinishedAt $ repos'
     | otherwise = txt "no repos" 
@@ -125,7 +127,7 @@ humanizeDuration d = TL.toStrict formatted
             | otherwise   = TF.format "{} seconds" (TF.Only d)
 
 
-nonPassCount :: [Repo] -> Int
+nonPassCount :: [InternalRepo] -> Int
 nonPassCount = length . filter isNotPassed
     where isNotPassed repo =    
             let buildState = fromMaybe Unknown $ repo ^. lastBuildState in
@@ -135,7 +137,7 @@ nonPassCount = length . filter isNotPassed
 timestampTxt :: UTCTime -> T.Text
 timestampTxt ts = T.pack $  formatTime defaultTimeLocale "%H:%m:%S" ts 
 
-lastBuildFinishedTxt :: AppState -> Repo -> T.Text
+lastBuildFinishedTxt :: AppState -> InternalRepo -> T.Text
 lastBuildFinishedTxt st repo = case repo ^. lastBuildFinishedAt of
     Nothing ->  T.pack "<unknown time>"
     (Just t) -> T.pack $ TFH.humanReadableTime' (st ^. timestamp) t
@@ -190,7 +192,7 @@ theMap = attrMap V.defAttr
     ]
 
 data CustomEvent = VtyEvent V.Event
-                 | ReposUpdate [Repo]
+                 | ReposUpdate [InternalRepo]
                  | NetworkError T.Text
 
 
