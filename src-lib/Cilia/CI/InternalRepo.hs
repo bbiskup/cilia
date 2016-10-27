@@ -1,7 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Cilia.CI.InternalRepo( BuildState(..)
-                            , InternalRepo
+                            , InternalRepo(..)
+                            , Slug
+                            , BuildNumber
                             , ToInternalRepo
                             , slug
                             , description

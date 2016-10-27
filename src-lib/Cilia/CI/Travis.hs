@@ -25,6 +25,7 @@ import Network.HTTP.Client hiding(responseBody)
 
 
 import qualified Cilia.CI.InternalRepo as IR
+import Cilia.CI.InternalRepo(InternalRepo(..))
 
 data BuildState =
       Passed
@@ -50,6 +51,8 @@ data Repo =
          , _active :: Maybe Bool
     }deriving(Ord, Eq, Show)
 
+makeLenses ''Repo
+
 instance FromJSON Repo where
     parseJSON = withObject "repo" $ \o ->
         Repo <$> o .: "slug"
@@ -66,24 +69,31 @@ instance FromJSON Repo where
             (Just ts) -> TI.parseISO8601 ts
 
 instance IR.ToInternalRepo Repo where
-    toInternalRepo _ = undefined
+    toInternalRepo travisRepo = 
+      InternalRepo
+          { IR._slug = travisRepo ^. slug
+          , IR._description =  travisRepo ^. description
+          , IR._lastBuildState = lastBuildState'
+          , IR._lastBuildNumber = travisRepo ^. lastBuildNumber
+          , IR._lastBuildFinishedAt = travisRepo ^. lastBuildFinishedAt
+          , IR._active = travisRepo ^.  active
+          }
+          where lastBuildState' = undefined
 
-makeLenses ''Repo
+{-        where lastBuildState'
+          | case lastTravisBuildState of
+              (Just s) = 
 
-{-render :: Repo -> TL.Text
-render repo =
-    TF.format fmt ( getText $ repo ^. slug
-                  , getText $ repo ^. description)
-        where 
-            getText = fromMaybe (T.pack "-")
-            fmt = "{} ({})" -}
+            where lastTravisBuildState = travisRepo ^. lastBuildState
+
+-}
 
 data ReposResponse =
-    ReposResponse { _repos :: [Repo]
+    ReposResponse { repos :: [Repo]
     } deriving (Eq, Show, Generic)
 
 instance FromJSON ReposResponse
-makeLenses ''ReposResponse
+-- makeLenses ''ReposResponse
 
 type Resp = W.Response ReposResponse
 
@@ -103,16 +113,6 @@ getInternalRepos userName' = do
     eitherR <- (Right <$> (W.asJSON =<< W.getWith opts reposUrl)) `E.catch` handler :: IO (Either String Resp)
     return (case eitherR of
         (Right r) -> do
-          let r' = (r ^. W.responseBody . repos)
+          let r' = repos (r ^. W.responseBody)
           Right $ fmap IR.toInternalRepo r'
         (Left s) -> Left s)
-
-{-_OBSOLETE_getInternalRepos :: T.Text -> IO (Either String [IR.InternalRepo])
-_OBSOLETE_getInternalRepos userName' = do 
-    eitherR <- getResp userName'
-    case eitherR of 
-      (Right resp) -> do  
-          let repos' = resp ^. repos
-          return $ Right $ fmap  IR.toInternalRepo repos'
-      (Left s) -> return Left s
--}
