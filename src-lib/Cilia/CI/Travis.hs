@@ -79,7 +79,7 @@ render repo =
             fmt = "{} ({})" -}
 
 data ReposResponse =
-    ReposResponse { repos :: [Repo]
+    ReposResponse { _repos :: [Repo]
     } deriving (Eq, Show, Generic)
 
 instance FromJSON ReposResponse
@@ -97,13 +97,22 @@ handler :: HttpException -> IO (Either String Resp)
 handler (StatusCodeException s _ _ ) = return $ Left $ BSC.unpack (s ^. W.statusMessage)
 handler e = return $ Left (show e)
 
-getResp :: T.Text -> IO (Either String ReposResponse)
-getResp userName' = do
+getInternalRepos :: T.Text -> IO (Either String [IR.InternalRepo])
+getInternalRepos userName' = do
     let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName')
     eitherR <- (Right <$> (W.asJSON =<< W.getWith opts reposUrl)) `E.catch` handler :: IO (Either String Resp)
     return (case eitherR of
-        (Right r) -> Right $ (r ^. W.responseBody)
+        (Right r) -> do
+          let r' = (r ^. W.responseBody . repos)
+          Right $ fmap IR.toInternalRepo r'
         (Left s) -> Left s)
 
-getInternalRepos :: T.Text -> IO (Either String [IR.InternalRepo])
-getInternalRepos = undefined
+{-_OBSOLETE_getInternalRepos :: T.Text -> IO (Either String [IR.InternalRepo])
+_OBSOLETE_getInternalRepos userName' = do 
+    eitherR <- getResp userName'
+    case eitherR of 
+      (Right resp) -> do  
+          let repos' = resp ^. repos
+          return $ Right $ fmap  IR.toInternalRepo repos'
+      (Left s) -> return Left s
+-}
