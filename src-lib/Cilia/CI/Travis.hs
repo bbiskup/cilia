@@ -75,10 +75,11 @@ instance IR.ToInternalRepo Repo where
           , IR._description =  travisRepo ^. description
           , IR._lastBuildState = lastBuildState'
           , IR._lastBuildNumber = travisRepo ^. lastBuildNumber
+          , IR._lastBuildDuration = travisRepo ^. lastBuildDuration
           , IR._lastBuildFinishedAt = travisRepo ^. lastBuildFinishedAt
           , IR._active = travisRepo ^.  active
           }
-          where lastBuildState' = undefined
+          where lastBuildState' = Just IR.Unknown
 
 {-        where lastBuildState'
           | case lastTravisBuildState of
@@ -111,8 +112,8 @@ getInternalRepos :: T.Text -> IO (Either String [IR.InternalRepo])
 getInternalRepos userName' = do
     let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName')
     eitherR <- (Right <$> (W.asJSON =<< W.getWith opts reposUrl)) `E.catch` handler :: IO (Either String Resp)
-    return (case eitherR of
+    case eitherR of
         (Right r) -> do
           let r' = repos (r ^. W.responseBody)
-          Right $ fmap IR.toInternalRepo r'
-        (Left s) -> Left s)
+          return $ Right $ fmap IR.toInternalRepo r'
+        (Left s) -> return $ Left s
