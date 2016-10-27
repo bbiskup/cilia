@@ -8,9 +8,11 @@ services:
         volumes:
             - .:/home/cilia
             - ./examples/cilia.yml:/root/cilia.yml
-        environment:
-            - PATH:$PATH:/home/cilia/.cabal-sandbox/bin
 
             # Access to Docker daemon on host
             - /usr/bin/docker:/usr/bin/docker
             - /var/run/docker.sock:/var/run/docker.sock
+
+        environment:
+            - PATH:$PATH:/home/cilia/.cabal-sandbox/bin
+
