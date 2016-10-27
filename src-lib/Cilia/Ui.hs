@@ -177,6 +177,8 @@ colorBuildState maybeBuildState =
     let attr = case buildState of
                     Passed -> "build.passed"
                     Failed -> "build.failed"
+                    Error -> "build.error"
+                    Running -> "build.running"
                     Unknown -> "build.unknown"
     in
         markup ((T.pack . show $ buildState) @? attr)
@@ -186,9 +188,10 @@ theMap :: AttrMap
 theMap = attrMap V.defAttr
     [ ("build.passed",      V.black `on` V.green)
     , ("build.failed",      V.white `on` V.red)
+    , ("status.error",     V.red `on` V.white)
+    , ("status.running",     V.yellow `on` V.white)
     , ("build.unknown",     V.black `on` V.white)
     , ("status.normal",     V.blue `on` V.white)
-    , ("status.error",     V.red `on` V.white)
     ]
 
 data CustomEvent = VtyEvent V.Event
