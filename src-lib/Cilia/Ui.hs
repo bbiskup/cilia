@@ -181,8 +181,11 @@ colorBuildState maybeBuildState =
                     Running -> "build.running"
                     Unknown -> "build.unknown"
     in
-        markup ((T.pack . show $ buildState) @? attr)
+        markup (bsTxt @? attr)
     where buildState = fromMaybe Unknown maybeBuildState
+          bsT = T.pack $ show $ buildState
+          bsTxt = padTxtRight (7 - T.length bsT) bsT
+
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
