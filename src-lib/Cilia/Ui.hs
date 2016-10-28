@@ -198,6 +198,7 @@ theMap = attrMap V.defAttr
     , ("build.unknown",     V.black `on` V.white)
     
     , ("status.normal",     V.blue `on` V.white)
+    , ("status.error",     V.red `on` V.white)
     ]
 
 data CustomEvent = VtyEvent V.Event

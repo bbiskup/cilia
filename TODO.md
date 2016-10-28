@@ -6,8 +6,6 @@
  * scrolling (list)
  * apply timezone when displaying timestamps
  * angular brackets around build status
- * adjust width of build status column to max (length of "Running"?)
- * "failed/errored" gets assigned wrong colors when repos get displayed (ok before)
  * CTRL+C to quit
 
 ## General
