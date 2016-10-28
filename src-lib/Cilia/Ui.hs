@@ -185,7 +185,7 @@ colorBuildState maybeBuildState =
         markup (bsTxt @? attr)
     where buildState = fromMaybe Unknown maybeBuildState
           bsT = T.pack $ show $ buildState
-          bsTxt = padTxtRight (7 - T.length bsT) bsT
+          bsTxt = T.concat [" ", padTxtRight (7 - T.length bsT + 1) bsT]
 
 
 theMap :: AttrMap

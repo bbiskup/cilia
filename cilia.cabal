@@ -83,7 +83,6 @@ library
                  , Cilia.CI.InternalRepo
                  , Cilia.CI.Travis
                  , Cilia.Opts
-                 , Cilia.Types
                  , Cilia.Ui
 
   ghc-options:         -threaded -Wall  -fwarn-tabs -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction -fwarn-unused-do-bind -fwarn-implicit-prelude
