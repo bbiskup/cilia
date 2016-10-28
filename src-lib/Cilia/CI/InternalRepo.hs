@@ -27,6 +27,7 @@ data BuildState =
       Passed
     | Failed
     | Error
+    | Queued
     | Running
     | Unknown
     deriving(Ord, Eq, Show)

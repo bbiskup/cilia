@@ -178,6 +178,7 @@ colorBuildState maybeBuildState =
                     Passed -> "build.passed"
                     Failed -> "build.failed"
                     Error -> "build.error"
+                    Queued -> "build.queued"
                     Running -> "build.running"
                     Unknown -> "build.unknown"
     in
@@ -192,6 +193,7 @@ theMap = attrMap V.defAttr
     [ ("build.passed",      V.black `on` V.green)
     , ("build.failed",      V.white `on` V.red)
     , ("build.error",     V.red `on` V.white)
+    , ("build.queued",     V.black `on` V.white)
     , ("build.running",     V.black `on` V.white)
     , ("build.unknown",     V.black `on` V.white)
     
