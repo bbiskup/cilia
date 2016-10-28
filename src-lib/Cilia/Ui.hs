@@ -76,7 +76,7 @@ ui st = [vBox [ headerUI st
     where
         statusBar' = statusBar 
                         (st ^. timestamp) 
-                        (nonPassCount activeRepos)
+                        (badStatusCount activeRepos)
                         (st ^. errMsg)
         activeRepos = filter (\repo -> fromMaybe False (repo ^. active)) $ st ^. repos
 
@@ -127,11 +127,11 @@ humanizeDuration d = TL.toStrict formatted
             | otherwise   = TF.format "{} seconds" (TF.Only d)
 
 
-nonPassCount :: [InternalRepo] -> Int
-nonPassCount = length . filter isNotPassed
+badStatusCount :: [InternalRepo] -> Int
+badStatusCount = length . filter isNotPassed
     where isNotPassed repo =    
             let buildState = fromMaybe Unknown $ repo ^. lastBuildState in
-            (buildState /= Passed) && (buildState /= Unknown)
+            (buildState == Failed) || (buildState == Error)
 
 
 timestampTxt :: UTCTime -> T.Text
@@ -152,7 +152,7 @@ stretchHFill ch = hBox[fWidget]
             return $ BT.Result (V.charFill a ch (BT.availWidth ctx) 1) [] []
 
 statusBar :: UTCTime -> Int -> Maybe ErrorMsg -> BT.Widget ()
-statusBar ts numNotPassed maybeErrMsg = withAttr "status.normal" $ hBox[
+statusBar ts numFailed maybeErrMsg = withAttr "status.normal" $ hBox[
       spacer
     , txt "ESC to quit"
     , stretchHFill ' '
@@ -164,9 +164,9 @@ statusBar ts numNotPassed maybeErrMsg = withAttr "status.normal" $ hBox[
     , spacer
     ]
     where spacer = txt " "
-          noPassCountMsg = TL.toStrict . TF.format "[{} failed/errored]" $ TF.Only numNotPassed
+          noPassCountMsg = TL.toStrict . TF.format "[{} failed/errored]" $ TF.Only numFailed
           noPassCountMsgAttr
-            | numNotPassed > 0 = "status.error"
+            | numFailed > 0 = "status.error"
             | otherwise = "status.normal"
           errorPart = case maybeErrMsg of
                 Nothing -> txt ""

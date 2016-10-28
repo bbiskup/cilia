@@ -8,6 +8,7 @@
  * angular brackets around build status
  * adjust width of build status column to max (length of "Running"?)
  * "failed/errored" gets assigned wrong colors when repos get displayed (ok before)
+ * CTRL+C to quit
 
 ## General
 * introduce lifecycle states to indicate initial loading of data
@@ -24,4 +25,3 @@
 * remove obsolete Types.hs
 * Retrieve reference data from Travis with correct accept header
 * blink when in state running (Graphics.Vty.Attributes.blink?)
-* correct count of failed/errorred test cases: don't count 'running'
