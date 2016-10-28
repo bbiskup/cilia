@@ -194,7 +194,7 @@ theMap = attrMap V.defAttr
     , ("build.failed",      V.white `on` V.red)
     , ("build.error",     V.red `on` V.white)
     , ("build.queued",     V.black `on` V.white)
-    , ("build.running",     V.black `on` V.white)
+    , ("build.running",     V.white `on` V.blue)
     , ("build.unknown",     V.black `on` V.white)
     
     , ("status.normal",     V.blue `on` V.white)

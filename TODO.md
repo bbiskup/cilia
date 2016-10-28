@@ -5,7 +5,6 @@
 ## UI
  * scrolling (list)
  * apply timezone when displaying timestamps
- * angular brackets around build status
  * CTRL+C to quit
 
 ## General
