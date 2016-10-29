@@ -27,6 +27,7 @@ import Network.HTTP.Client hiding(responseBody)
 
 import qualified Cilia.CI.InternalRepo as IR
 import Cilia.CI.InternalRepo(InternalRepo(..))
+import qualified Cilia.Config as C
 
 data BuildState =
       Passed
@@ -120,8 +121,9 @@ handler :: HttpException -> IO (Either String Resp)
 handler (StatusCodeException s _ _ ) = return $ Left $ BSC.unpack (s ^. W.statusMessage)
 handler e = return $ Left (show e)
 
-getInternalRepos :: T.Text -> IO (Either String [IR.InternalRepo])
-getInternalRepos userName' = do
+getInternalRepos :: C.TravisSection -> IO (Either String [IR.InternalRepo])
+getInternalRepos travisSection = do
+    let userName' = travisSection ^. C.userName
     let reposUrl = TL.unpack $ TF.format "https://api.travis-ci.org/repos/{}" (TF.Only userName')
     eitherR <- (Right <$> (W.asJSON =<< W.getWith opts reposUrl)) `E.catch` handler :: IO (Either String Resp)
     case eitherR of
