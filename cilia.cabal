@@ -74,7 +74,7 @@ library
                      , http-client == 0.4.31.1
                      , friendly-time == 0.4
                      , iso8601-time == 0.1.4
-                     , brick == 0.10
+                     , brick == 0.12
                      , hlint == 1.9.37
   
   exposed-modules: Cilia.LibMain
