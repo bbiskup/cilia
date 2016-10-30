@@ -19,6 +19,12 @@ docker run -ti -eTERM=$TERM  -v$PWD/cilia.yml:/root/cilia.yml --rm bbiskup/cilia
 ```
 
 ## From source
+This requires the Haskell platform to be installed. On Ubuntu via:
+
+```bash
+apt-get update
+apt-get install haskell-platform
+```
 
 ```bash
 git clone https://github.com/bbiskup/cilia
