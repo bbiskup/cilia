@@ -53,7 +53,7 @@
 
 ## DroneIO
 
-# http://readme.drone.io/0.5/reference/api/overview/
+* http://readme.drone.io/0.5/reference/api/overview/
 
 ## Wercker
 
