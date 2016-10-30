@@ -17,9 +17,6 @@
 * introduce lifecycle states to indicate initial loading of data
 * add command line option to generate config
 
-# Travis
-
-* show build duration while building
 
 # Build & deployment
 
@@ -37,6 +34,10 @@
 ## CI Saas
 * List of hosted CI SaaS: https://gist.github.com/rmoriz/5296881
 * http://alternativeto.net/software/codeship/?license=free
+
+## Travis
+
+* show build duration while building
 
 ## Misc
 * Concurrect requests to all Saas backends: http://stackoverflow.com/a/39016598 
