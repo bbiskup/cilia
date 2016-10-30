@@ -38,3 +38,13 @@ cd cilia
 make build
 ```
 
+# Configuration
+
+Example:
+
+```yaml
+default:
+  refreshInterval: 5 
+travis:
+  userName: bbiskup
+```
