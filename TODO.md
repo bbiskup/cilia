@@ -3,6 +3,7 @@
 ## Backends
 
 ## UI
+
  * scrolling (list)
  * apply timezone when displaying timestamps
  * CTRL+C to quit
@@ -12,22 +13,27 @@
    - shorter human-readable time since last build?
 
 ## General
+
 * introduce lifecycle states to indicate initial loading of data
 * add command line option to generate config
 
 # Travis
+
 * show build duration while building
 
-# Build & deploymnent
-* check out https://github.com/dkubb/haskell-builder
+# Build & deployment
 
+* check out https://github.com/dkubb/haskell-builder
+* change user root -> cilia for cilia container
 
 # Misc 
+
 * remove obsolete Types.hs
 * Retrieve reference data from Travis with correct accept header
 * blink when in state running (Graphics.Vty.Attributes.blink?)
 
 # Backends
+
 * List of hosted CI SaaS: https://gist.github.com/rmoriz/5296881
 * http://alternativeto.net/software/codeship/?license=free
 
@@ -37,12 +43,16 @@
 * https://documentation.codeship.com/integrations/api/
 
 ## CircleCI
+
 * Auth token apparently required
 * https://circleci.com/docs/api/
 
 ## DroneIO
+
 # http://readme.drone.io/0.5/reference/api/overview/
 
 ## Wercker
+
+https://app.wercker.com/bbiskup
 
 ## Shippable
