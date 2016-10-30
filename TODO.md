@@ -34,8 +34,12 @@
 
 # Backends
 
+## CI Saas
 * List of hosted CI SaaS: https://gist.github.com/rmoriz/5296881
 * http://alternativeto.net/software/codeship/?license=free
+
+## Misc
+* Concurrect requests to all Saas backends: http://stackoverflow.com/a/39016598 
 
 ## Codeship
 
