@@ -26,6 +26,8 @@ apt-get update
 apt-get install haskell-platform
 ```
 
+Then:
+
 ```bash
 git clone https://github.com/bbiskup/cilia
 cd cilia
