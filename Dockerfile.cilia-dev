@@ -19,7 +19,7 @@ ADD ./src src
 
 # RUN cabal install
 
-ENV PATH=$PATH:/home/cilia/dist/build/cilia
+ENV PATH=$PATH:/home/cilia/.cabal-sandbox/bin:/home/cilia/dist/build/
 
 
 ENTRYPOINT  ["/bin/bash", "-c"]
