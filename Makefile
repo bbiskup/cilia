@@ -4,6 +4,8 @@ REPO_LATEST_TAG=bbiskup/cilia:latest
 bash:
 	./scripts/docker-cmd.sh bash
 
+run-eventlog:
+	./scripts/docker-cmd.sh cabal run -- -c cilia.yml +RTS -l
 
 build:
 	./scripts/docker-cmd.sh "cabal sandbox init ; cabal update &&  cabal install --only-dependencies --enable-test && cabal configure --enable-test && cabal build"
