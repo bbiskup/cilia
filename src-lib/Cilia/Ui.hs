@@ -184,17 +184,17 @@ colorBuildState maybeBuildState =
     in
         markup (bsTxt @? attr)
     where buildState = fromMaybe Unknown maybeBuildState
-          bsT = T.pack $ show $ buildState
+          bsT = T.pack $ show buildState
           bsTxt = T.concat [" ", padTxtRight (7 - T.length bsT) bsT, " "]
 
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
     [ ("build.passed",      V.black `on` V.green)
-    , ("build.failed",      flip V.withStyle V.bold (V.white `on` V.red))
-    , ("build.error",       flip V.withStyle V.bold (V.white `on` V.red))
+    , ("build.failed",      V.withStyle (V.white `on` V.red) V.bold)
+    , ("build.error",       V.withStyle (V.white `on` V.red) V.bold)
     , ("build.queued",      V.black `on` V.white)
-    , ("build.running",     flip V.withStyle V.underline (V.white `on` V.blue))
+    , ("build.running",     V.withStyle (V.white `on` V.blue) V.underline)
     , ("build.unknown",     V.black `on` V.white)
     
     , ("status.normal",     V.blue `on` V.white)
