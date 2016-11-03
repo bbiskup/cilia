@@ -29,5 +29,6 @@ script:
   - make build
   - make create-minimal-docker-container
   - make test
+  - make build-debian-package
   - make docker-push
 

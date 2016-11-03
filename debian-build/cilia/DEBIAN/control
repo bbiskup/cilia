@@ -1,0 +1,11 @@
+Package: cilia
+Architecture: amd64
+Maintainer: Bernhard Biskup
+Depends: debconf (>= 0.5.00), libc6, libtinfo5, libgmp10, libgcc1
+Priority: optional
+Version: 0.0.1
+Description: Continuous integration monitor
+ cilia allows monitoring the build status of projects on
+ one or more build servers simultaneously
+ .
+ A simple terminal dashboard for CI servers
