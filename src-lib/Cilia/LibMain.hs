@@ -10,6 +10,7 @@ import Data.Default(def)
 import Brick.Main(customMain)
 import qualified Graphics.Vty as V
 import Options.Applicative
+import qualified GHC.Conc as GO
 
 import Cilia.Opts( Opts(..)
                  , optsParser)
@@ -49,7 +50,8 @@ doMain (Opts configFileName') = do
     config <- Cilia.Config.readConfig configFileName'
     chan <- newChan
     initialState' <- initialState config
-    _ <- forkIO $ CI.checkCIServers config chan
+    ciThread <- forkIO $ CI.checkCIServers config chan
+    GO.labelThread ciThread "CI"
     void $ customMain (V.mkVty def) chan app initialState'
 
 libMain :: IO ()
