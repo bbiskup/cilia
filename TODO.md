@@ -16,18 +16,22 @@
 
 * introduce lifecycle states to indicate initial loading of data
 * add command line option to generate config
+* nicer error message when config file is missing
 
 
 # Build & deployment
+## Debian
+* deploy Debian package to PPA (or, preliminarily, to public S3 bucket via Travis)
+  - https://docs.travis-ci.com/user/uploading-artifacts/
+* Set version in control file
 
-* check out https://github.com/dkubb/haskell-builder
+## Misc
 * change user root -> cilia for cilia container
 
 # Misc 
 
-* remove obsolete Types.hs
-* Retrieve reference data from Travis with correct accept header
 * blink when in state running (Graphics.Vty.Attributes.blink?)
+  * not possible with xterm?
 
 # Backends
 
@@ -61,3 +65,6 @@
 https://app.wercker.com/bbiskup
 
 ## Shippable
+
+# Nice-to-have
+## acoustic feedback on failure
