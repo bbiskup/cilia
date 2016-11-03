@@ -211,6 +211,8 @@ appEvent st e = do
     timestamp' <- liftIO getCurrentTime
     case e of
         VtyEvent (V.EvKey V.KEsc []) -> halt st
+        VtyEvent (V.EvKey (V.KChar 'q') []) -> halt st
+        VtyEvent (V.EvKey (V.KChar 'c') [V.MCtrl]) -> halt st
         VtyEvent ev -> continue $ st & stLastVtyEvent .~ Just ev
         (ReposUpdate newRepos) -> continue $ st 
             & (repos .~ newRepos) 
