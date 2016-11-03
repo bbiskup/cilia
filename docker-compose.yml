@@ -12,7 +12,13 @@ services:
             # Access to Docker daemon on host
             - /usr/bin/docker:/usr/bin/docker
             - /var/run/docker.sock:/var/run/docker.sock
+            
+            # Running X11 client (e.g. threadscope) inside container
+            # requires xhost +
+            - /tmp/.X11-unix:/tmp/.X11-unix:rw
 
         environment:
-            - PATH:$PATH:/home/cilia/.cabal-sandbox/bin
+            - PATH=$PATH:/home/cilia/.cabal-sandbox/bin
+            - DISPLAY=unix$DISPLAY
+
 

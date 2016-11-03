@@ -2,7 +2,9 @@ FROM haskell:7.10.3
 MAINTAINER bbiskup@gmx.de
 
 RUN apt-get -yy update && \
-    apt-get install -yy python python-pip rsync libltdl7 && \
+    apt-get install -yy \
+        python python-pip rsync libltdl7 \
+        threadscope && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install dockerize==0.2.2
