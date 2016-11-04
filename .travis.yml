@@ -8,7 +8,10 @@ dist: trusty
 
 addons:
   artifacts: true
-  s3_region: "eu-central-1"
+    debug: true
+    s3_region: "eu-central-1"
+    paths:
+      - ./debian-build/cilia.deb
 
 cache:
   directories:
