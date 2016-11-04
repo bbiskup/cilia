@@ -3,3 +3,7 @@
 /cabal.sandbox.config
 /dist
 /OLD
+/debian-build/cilia*.deb
+/debian-build/cilia/usr
+/debian-build/cilia/etc
+*.eventlog
