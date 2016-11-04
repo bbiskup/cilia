@@ -40,8 +40,10 @@ docker-push:
 
 build-debian-package:
 	sudo chown -R root:root debian-build
+	sudo mkdir -p debian-build/dist
 	sudo mkdir -p debian-build/cilia/etc/skel
 	sudo mkdir -p debian-build/cilia/usr/bin
 	sudo cp dist/build/cilia/cilia debian-build/cilia/usr/bin/
 	sudo cp examples/cilia.yml debian-build/cilia/etc/skel/
 	sudo dpkg-deb --build debian-build/cilia
+	sudo mv debian-build/cilia*.deb debian-build/dist

@@ -12,7 +12,7 @@ addons:
     s3_region: "eu-central-1"
     bucket: "cilia-deb"
     paths:
-      - ./debian-build/cilia.deb
+      - ./debian-build/dist/cilia.deb
 
 cache:
   directories:
