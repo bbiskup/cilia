@@ -7,7 +7,7 @@ services:
 dist: trusty
 
 addons:
-  artifacts: true
+  artifacts:
     debug: true
     s3_region: "eu-central-1"
     paths:
