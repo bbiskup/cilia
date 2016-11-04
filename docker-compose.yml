@@ -17,6 +17,7 @@ services:
             # requires xhost +
             - /tmp/.X11-unix:/tmp/.X11-unix:rw
 
+            - ./debian-build:/home/cilia/debian-build
         environment:
             - DISPLAY=unix$DISPLAY
 
