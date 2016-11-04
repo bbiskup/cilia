@@ -10,6 +10,7 @@ addons:
   artifacts:
     debug: true
     s3_region: "eu-central-1"
+    bucket: "cilia-deb"
     paths:
       - ./debian-build/cilia.deb
 
