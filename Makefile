@@ -47,3 +47,5 @@ build-debian-package:
 	sudo cp examples/cilia.yml debian-build/cilia/etc/skel/
 	sudo dpkg-deb --build debian-build/cilia
 	sudo mv debian-build/cilia*.deb debian-build/dist
+
+.PHONY: test
