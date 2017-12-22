@@ -29,7 +29,7 @@ before_script:
   - du -sh .cabal-sandbox
   # - du -sh ~/.travis-docker/
   # - if [[ -e ~/.travis-docker/dev-image.tar ]]; then echo "Loading cached dev image"; docker load -i ~/.travis-docker/dev-image.tar; fi
-  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - ./scripts/bootstrap.sh
   # - mkdir -p ~/.travis-docker; docker save cilia_dev > ~/.travis-docker/dev-image.tar
 
