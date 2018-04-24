@@ -3,7 +3,7 @@ MAINTAINER bbiskup@gmx.de
 
 RUN apt-get -yy update && \
     apt-get install -yy \
-        python python-pip rsync libltdl7 libssl-dev \
+        python python-dev python-pip rsync libltdl7 libssl-dev \
         threadscope libghc-ghc-events-dev && \
     rm -rf /var/lib/apt/lists/*
 
